@@ -1,6 +1,6 @@
 FROM scratch AS ctx
 
-FROM docker.io/archlinux/archlinux:latest
+FROM docker.io/cachyos/cachyos:latest
 
 ENV DEV_DEPS="base-devel git rust"
 
