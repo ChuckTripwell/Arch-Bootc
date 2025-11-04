@@ -1,4 +1,4 @@
-FROM docker.io/archlinux/archlinux:latest
+FROM docker.io/archlinux/archlinux:latest AS builder
 
 # ---------------------------
 # Package groups as Bash arrays
