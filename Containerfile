@@ -112,12 +112,12 @@ USER build
 WORKDIR /home/build
 
 # ---------------------------
-#
+# Build local PKGBUILDs (failures are fatal here; keep as-is)
 # ---------------------------
-RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
-    git clone https://github.com/bootc-dev/bootc.git /tmp/bootc && \
-    cd /tmp/bootc && \
-    make bin install-all install-initramfs-dracut
+RUN cp -r /packages /home/build && chown -R build:build /home/build/packages && \
+    cd /home/build/packages/bootc && makepkg -si --noconfirm && \
+    cd /home/build/packages/bootupd && makepkg -si --noconfirm && \
+    cd /home/build/packages/composefs-rs && makepkg -si --noconfirm
 
 # ---------------------------
 # Build paru and install AUR packages (allow failure)
