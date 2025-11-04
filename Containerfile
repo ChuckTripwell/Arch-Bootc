@@ -3,53 +3,11 @@ FROM docker.io/archlinux/archlinux:latest AS builder
 ENV DEV_DEPS="base-devel git rust"
 
 ENV DRACUT_NO_XATTR=1
-
-# ---------------------------
-# Package groups
-# ---------------------------
-    RUN pacman -Syyuu --noconfirm ${DEV_DEPS} && \
-# System essentials
-    dracut linux linux-firmware ostree composefs systemd btrfs-progs e2fsprogs xfsprogs udev cpio zstd binutils dosfstools conmon crun netavark skopeo dbus dbus-glib glib2 shadow nix sddm \
-    \
-# Fonts
-    noto-fonts noto-fonts-cjk noto-fonts-emoji \
-    \
-# Multimedia
-    qt6-multimedia-ffmpeg plymouth flatpak acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli vulkan-tools wayland-utils xorg-xdpyinfo \
-    \
-# CLI utilities
-    bash-completion bat busybox duf fastfetch fd gping grml-zsh-config htop jq less lsof mcfly nano nix nvtop openssh powertop procs ripgrep tldr \
-    trash-cli tree usbutils vim wget wl-clipboard ydotool zsh zsh-completions \
-    \
-# Firmware / boot / drivers
-    amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver libva-nvidia-driver \
-    libva nvidia-open vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor \
-    \
-# Network / VPN / SMB
-    dnsmasq freerdp2 iproute2 iwd libmtp networkmanager-l2tp networkmanager-openconnect networkmanager-openvpn networkmanager-pptp \
-    networkmanager-strongswan networkmanager-vpnc nfs-utils nss-mdns samba smbclient ufw \
-    \
-# Accessibility / speech
-    espeak-ng orca \
-    \
-# Pipewire / audio
-    pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber \
-    \
-# Printing
-    cups cups-browsed gutenprint ipp-usb hplip splix system-config-printer \
-    \
-# Other user tools / vaults / encoding
-    accountsservice aspell cryfs editorconfig-core-c encfs ffmpeg fwupd geoclue gocryptfs hspell icoutils jxrlib libappimage libavif libheif libjxl libraw opencv openexr switcheroo-control \
-    \
-# Hardware / Xorg / Wayland
-    xorg-xwayland acsccid bmusb ccid dosfstools fprintd iio-sensor-proxy steam-devices-git thermald tpm2-tss tuned-ppd \
-    \
-# AUR packages
-    fenrir-git kde-builder-git usb-dirty-pages-udev waydroid \
-    \
+RUN pacman -Syyuu --noconfirm \
+      base dracut linux linux-firmware ostree composefs systemd btrfs-progs e2fsprogs xfsprogs udev cpio zstd binutils dosfstools conmon crun netavark skopeo dbus dbus-glib glib2 shadow \
       ${DEV_DEPS} && \
-    pacman -S --clean && \
-    rm -rf /var/cache/pacman/pkg/*
+  pacman -S --clean && \
+  rm -rf /var/cache/pacman/pkg/*
 
 RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
     git clone https://github.com/bootc-dev/bootc.git /tmp/bootc && \
