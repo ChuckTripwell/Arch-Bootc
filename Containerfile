@@ -7,7 +7,7 @@ ENV DRACUT_NO_XATTR=1
 # ---------------------------
 # Package groups
 # ---------------------------
-    RUN pacman -Syyuu --noconfirm \
+    RUN pacman -Syyuu --noconfirm ${DEV_DEPS} && \
 # System essentials
     dracut linux linux-firmware ostree composefs systemd btrfs-progs e2fsprogs xfsprogs udev cpio zstd binutils dosfstools conmon crun netavark skopeo dbus dbus-glib glib2 shadow nix sddm \
     \
