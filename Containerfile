@@ -5,46 +5,51 @@ ENV DEV_DEPS="base-devel git rust"
 ENV DRACUT_NO_XATTR=1
 
 # ---------------------------
-# Package groups as Bash arrays
+# Package groups
 # ---------------------------
+    RUN pacman -Syyuu --noconfirm \
 # System essentials
-ARG SYSTEM_PACKAGES="dracut linux linux-firmware ostree composefs systemd btrfs-progs e2fsprogs xfsprogs udev cpio zstd binutils dosfstools conmon crun netavark skopeo dbus dbus-glib glib2 shadow nix sddm"
-
-# KDE packages
-ARG KDE_PACKAGES="kde-linux"
-
+    dracut linux linux-firmware ostree composefs systemd btrfs-progs e2fsprogs xfsprogs udev cpio zstd binutils dosfstools conmon crun netavark skopeo dbus dbus-glib glib2 shadow nix sddm \
+    \
 # Fonts
-ARG FONT_PACKAGES="noto-fonts noto-fonts-cjk noto-fonts-emoji"
-
+    noto-fonts noto-fonts-cjk noto-fonts-emoji \
+    \
 # Multimedia
-ARG MULTIMEDIA_PACKAGES="qt6-multimedia-ffmpeg plymouth flatpak acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli vulkan-tools wayland-utils xorg-xdpyinfo"
-
+    qt6-multimedia-ffmpeg plymouth flatpak acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli vulkan-tools wayland-utils xorg-xdpyinfo \
+    \
 # CLI utilities
-ARG CLI_PACKAGES="bash-completion bat busybox duf fastfetch fd gping grml-zsh-config htop jq less lsof mcfly nano nix nvtop openssh powertop procs ripgrep tldr trash-cli tree usbutils vim wget wl-clipboard ydotool zsh zsh-completions"
-
-# Firmware / boot / drivers (added apparmor)
-ARG FIRMWARE_PACKAGES="amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver libva-nvidia-driver libva nvidia-open vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor"
-
+    bash-completion bat busybox duf fastfetch fd gping grml-zsh-config htop jq less lsof mcfly nano nix nvtop openssh powertop procs ripgrep tldr \
+    trash-cli tree usbutils vim wget wl-clipboard ydotool zsh zsh-completions \
+    \
+# Firmware / boot / drivers
+    amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver libva-nvidia-driver \
+    libva nvidia-open vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor \
+    \
 # Network / VPN / SMB
-ARG NETWORK_PACKAGES="dnsmasq freerdp2 iproute2 iwd libmtp networkmanager-l2tp networkmanager-openconnect networkmanager-openvpn networkmanager-pptp networkmanager-strongswan networkmanager-vpnc nfs-utils nss-mdns samba smbclient ufw"
-
+    dnsmasq freerdp2 iproute2 iwd libmtp networkmanager-l2tp networkmanager-openconnect networkmanager-openvpn networkmanager-pptp \
+    networkmanager-strongswan networkmanager-vpnc nfs-utils nss-mdns samba smbclient ufw \
+    \
 # Accessibility / speech
-ARG ACCESS_PACKAGES="espeak-ng orca"
-
+    espeak-ng orca \
+    \
 # Pipewire / audio
-ARG PIPEWIRE_PACKAGES="pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber"
-
+    pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber \
+    \
 # Printing
-ARG PRINT_PACKAGES="cups cups-browsed gutenprint ipp-usb hplip splix system-config-printer"
-
+    cups cups-browsed gutenprint ipp-usb hplip splix system-config-printer \
+    \
 # Other user tools / vaults / encoding
-ARG USER_PACKAGES="accountsservice aspell cryfs editorconfig-core-c encfs ffmpeg fwupd geoclue gocryptfs hspell icoutils jxrlib libappimage libavif libheif libjxl libraw opencv openexr switcheroo-control"
-
+    accountsservice aspell cryfs editorconfig-core-c encfs ffmpeg fwupd geoclue gocryptfs hspell icoutils jxrlib libappimage libavif libheif libjxl libraw opencv openexr switcheroo-control \
+    \
 # Hardware / Xorg / Wayland
-ARG HARDWARE_PACKAGES="xorg-xwayland acsccid bmusb ccid dosfstools fprintd iio-sensor-proxy steam-devices-git thermald tpm2-tss tuned-ppd"
-
+    xorg-xwayland acsccid bmusb ccid dosfstools fprintd iio-sensor-proxy steam-devices-git thermald tpm2-tss tuned-ppd \
+    \
 # AUR packages
-ARG AUR_PACKAGES="fenrir-git kde-builder-git usb-dirty-pages-udev waydroid"
+    fenrir-git kde-builder-git usb-dirty-pages-udev waydroid \
+    \
+      ${DEV_DEPS} && \
+    pacman -S --clean && \
+    rm -rf /var/cache/pacman/pkg/*
 
 RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
     git clone https://github.com/bootc-dev/bootc.git /tmp/bootc && \
