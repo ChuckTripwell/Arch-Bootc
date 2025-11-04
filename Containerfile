@@ -20,7 +20,7 @@ ARG MULTIMEDIA_PACKAGES="qt6-multimedia-ffmpeg plymouth flatpak acpid aha \
       wayland-utils xorg-xdpyinfo"
 
 # CLI utilities
-ARG CLI_PACKAGES="bash-completion bat busybox duf fastfetch fd gping \
+ARG CLI_PACKAGES="git bash-completion bat busybox duf fastfetch fd gping \
       grml-zsh-config htop jq less lsof mcfly nano nix nvtop openssh powertop \
       procs ripgrep tldr trash-cli tree usbutils vim wget wl-clipboard ydotool \
       zsh zsh-completions"
@@ -56,14 +56,6 @@ iio-sensor-proxy steam-devices-git thermald tpm2-tss tuned-ppd"
 
 # AUR packages
 ARG AUR_PACKAGES="fenrir-git kde-builder-git usb-dirty-pages-udev waydroid"
-
-# ---------------------------
-# Git Bootc repo and initialize ram filesystem
-# ---------------------------
-RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
-    git clone https://github.com/bootc-dev/bootc.git /tmp/bootc && \
-    cd /tmp/bootc && \
-    make bin install-all install-initramfs-dracut
 
 # ---------------------------
 # Configure Arch snapshot and KDE Linux repo
