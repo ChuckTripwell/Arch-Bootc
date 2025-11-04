@@ -4,7 +4,8 @@ ENV DEV_DEPS="base-devel git rust"
 
 ENV DRACUT_NO_XATTR=1
 RUN pacman -Syyuu --noconfirm \
-      base dracut linux linux-firmware ostree composefs systemd btrfs-progs e2fsprogs xfsprogs udev cpio zstd binutils dosfstools conmon crun netavark skopeo dbus dbus-glib glib2 shadow \
+      base dracut linux linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow \
+      qt6-multimedia-ffmpeg plymouth flatpak acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli vulkan-tools wayland-utils \
       ${DEV_DEPS} && \
   pacman -S --clean && \
   rm -rf /var/cache/pacman/pkg/*
