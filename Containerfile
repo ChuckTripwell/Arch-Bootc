@@ -1,5 +1,7 @@
 FROM docker.io/archlinux/archlinux:latest AS builder
 
+ENV DEV_DEPS="base-devel git rust"
+
 # ---------------------------
 # Package groups as Bash arrays
 # ---------------------------
