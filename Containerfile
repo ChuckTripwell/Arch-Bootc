@@ -58,6 +58,14 @@ iio-sensor-proxy steam-devices-git thermald tpm2-tss tuned-ppd"
 ARG AUR_PACKAGES="fenrir-git kde-builder-git usb-dirty-pages-udev waydroid"
 
 # ---------------------------
+# Git Bootc repo and initialize ram filesystem
+# ---------------------------
+RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
+    git clone https://github.com/bootc-dev/bootc.git /tmp/bootc && \
+    cd /tmp/bootc && \
+    make bin install-all install-initramfs-dracut
+
+# ---------------------------
 # Configure Arch snapshot and KDE Linux repo
 # ---------------------------
 RUN BUILD_DATE=$(curl --fail --silent https://cdn.kde.org/kde-linux/packaging/build_date.txt) && \
