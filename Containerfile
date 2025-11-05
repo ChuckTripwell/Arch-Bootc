@@ -36,7 +36,7 @@ RUN pacman -Syyuu --noconfirm \
 \
 
       ${DEV_DEPS} && \
-  pacman -S --clean && \
+  pacman -S --clean --noconfirm && \
   rm -rf /var/cache/pacman/pkg/*
 
 # START ##########################################################################################################################################
