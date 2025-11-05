@@ -11,7 +11,7 @@ RUN pacman -Syyuu --noconfirm \
       qt6-multimedia-ffmpeg plymouth flatpak acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli vulkan-tools wayland-utils \
 \
 #Fonts
-      noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-maplemono \
+      noto-fonts noto-fonts-cjk noto-fonts-emoji \
 \
 #CLI Utilities
       bash-completion bat busybox duf fastfetch fd gping grml-zsh-config htop jq less lsof mcfly nano nix nvtop openssh powertop \
@@ -73,6 +73,7 @@ RUN paru -S \
         aur/matugen-bin \
         aur/input-remapper-bin \
         aur/waydroid \
+        aur/ttf-maplemono \
         --noconfirm
 
 USER root
