@@ -73,7 +73,6 @@ RUN paru -S \
         aur/matugen-bin \
         aur/input-remapper-bin \
         aur/waydroid \
-        aur/ttf-maple \
         --noconfirm
 
 USER root
