@@ -3,7 +3,7 @@ FROM docker.io/archlinux/archlinux:latest AS builder
 ENV DEV_DEPS="base-devel git rust"
 
 ENV DRACUT_NO_XATTR=1
-RUN pacman -Sy archlinux-keyring --noconfirm \
+RUN pacman-key --init && pacman-key --populate && pacman -Sy --noconfirm \
 #Base packages
       base dracut linux linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow \
 \
