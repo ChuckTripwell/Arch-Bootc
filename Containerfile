@@ -1,5 +1,7 @@
 FROM docker.io/archlinux/archlinux:latest AS builder
 
+FROM docker.io/cachyos/cachyos-v4:latest AS kernel
+
 ENV DEV_DEPS="base-devel git rust"
 
 ENV DRACUT_NO_XATTR=1
@@ -91,24 +93,8 @@ WORKDIR /
 # Cachy Kernel Replacement
 ##########################
 
-FROM docker.io/cachyos/cachyos-v4:latest AS kernel
-
-RUN pacman -Syyu --noconfirm
-
-RUN pacman -Sw --noconfirm linux-cachyos linux-cachyos-headers
-
-COPY --from=kernel /var/cache/pacman/pkg/linux-cachyos-*.pkg.tar.zst /tmp/
-COPY --from=kernel /var/cache/pacman/pkg/linux-cachyos-headers-*.pkg.tar.zst /tmp/
-
-RUN pacman -U --noconfirm /tmp/linux-cachyos-*.pkg.tar.zst /tmp/linux-cachyos-headers-*.pkg.tar.zst \
-    && rm -rf /var/cache/pacman/pkg/* /tmp/linux-cachyos-*.pkg.tar.zst
-
-RUN mkdir -p /usr/lib/ostree-boot \
- && cp -r /boot/* /usr/lib/ostree-boot/ || true
-
-RUN rm -rf /boot
-
-RUN systemctl enable systemd-networkd systemd-resolved || true
+COPY --from=kernel /usr/lib/modules ${BOOTC_ROOTFS_MOUNTPOINT}/usr/lib/modules
+COPY --from=kernel /boot ${BOOTC_ROOTFS_MOUNTPOINT}/boot
 
 #############################
 #Cachy Kernel Replacement End
