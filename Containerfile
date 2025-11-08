@@ -87,6 +87,33 @@ WORKDIR /
 
 # END ############################################################################################################################################
 
+##########################
+# Cachy Kernel Replacement
+##########################
+
+FROM docker.io/cachyos/cachyos-v4:latest AS kernel
+
+RUN pacman -Syyu --noconfirm
+
+RUN pacman -Sw --noconfirm linux-cachyos linux-cachyos-headers
+
+COPY --from=kernel /var/cache/pacman/pkg/linux-cachyos-*.pkg.tar.zst /tmp/
+COPY --from=kernel /var/cache/pacman/pkg/linux-cachyos-headers-*.pkg.tar.zst /tmp/
+
+RUN pacman -U --noconfirm /tmp/linux-cachyos-*.pkg.tar.zst /tmp/linux-cachyos-headers-*.pkg.tar.zst \
+    && rm -rf /var/cache/pacman/pkg/* /tmp/linux-cachyos-*.pkg.tar.zst
+
+RUN mkdir -p /usr/lib/ostree-boot \
+ && cp -r /boot/* /usr/lib/ostree-boot/ || true
+
+RUN rm -rf /boot
+
+RUN systemctl enable systemd-networkd systemd-resolved || true
+
+#############################
+#Cachy Kernel Replacement End
+#############################
+
 # Workaround due to dracut version bump, please remove eventually
 # FIXME: remove
 RUN echo -e "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee /etc/dracut.conf.d/fix-bootc.conf
