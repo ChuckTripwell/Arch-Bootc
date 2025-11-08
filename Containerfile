@@ -9,7 +9,7 @@ RUN pacman -Sy --noconfirm \
       base dracut linux linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow \
 \
 #Media/Install utilities
-      qt6-multimedia-ffmpeg plymouth flatpak acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli vulkan-tools wayland-utils \
+       librsvg libglvnd qt6-multimedia-ffmpeg plymouth flatpak acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli vulkan-tools wayland-utils \
 \
 #Fonts
       noto-fonts noto-fonts-cjk noto-fonts-emoji \
@@ -64,7 +64,8 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
 #    paru -S \
 #        aur/placeholder \
 #        --noconfirm
-RUN sudo pacman -S --needed yay
+
+RUN pacman -S --needed yay
 
 RUN yay -S \
         aur/steam-devices-git \
