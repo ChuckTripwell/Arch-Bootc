@@ -66,12 +66,10 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
 #        --noconfirm
 
 #AUR Packages to install/Build
-RUN yay -Syyuu --noconfirm \
+RUN paru -Syyuu \
         steam-devices-git niri-git noctalia-shell-git matugen-bin input-remapper-bin waydroid \
 \
-      ${DEV_DEPS} && \
-  pacman -S --clean --noconfirm && \
-  rm -rf /var/cache/pacman/pkg/*
+      --noconfirm
 
 USER root
 WORKDIR /
