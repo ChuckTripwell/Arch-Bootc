@@ -1,6 +1,4 @@
-FROM docker.io/archlinux/archlinux:latest AS builder
-
-FROM docker.io/cachyos/cachyos-v4:latest AS kernel
+FROM docker.io/cachyos/cachyos:latest AS builder
 
 ENV DEV_DEPS="base-devel git rust"
 
@@ -88,17 +86,6 @@ WORKDIR /
 #    rm -rf /tmp/*
 
 # END ############################################################################################################################################
-
-##########################
-# Cachy Kernel Replacement
-##########################
-
-COPY --from=kernel /usr/lib/modules ${BOOTC_ROOTFS_MOUNTPOINT}/usr/lib/modules
-COPY --from=kernel /boot ${BOOTC_ROOTFS_MOUNTPOINT}/boot
-
-#############################
-#Cachy Kernel Replacement End
-#############################
 
 # Workaround due to dracut version bump, please remove eventually
 # FIXME: remove
