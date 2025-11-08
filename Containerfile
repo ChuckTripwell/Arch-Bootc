@@ -62,14 +62,12 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
     cd .. && \
     rm -drf paru-bin
 
-RUN paru -S \
-        aur/steam-devices-git \
-        aur/uxplay \
-        aur/niri-git \
-        aur/dms-shell-git \
-        aur/matugen-bin \
-        aur/input-remapper-bin \
-        --noconfirm
+RUN paru -Syyuu --noconfirm \
+        steam-devices-git niri-git dms-shell-git dms-shell-git matugen-bin input-remapper-bin \
+\
+      ${DEV_DEPS} && \
+  pacman -S --clean --noconfirm && \
+  rm -rf /var/cache/pacman/pkg/*
 
 USER root
 WORKDIR /
