@@ -41,36 +41,6 @@ RUN pacman -Syyuu --noconfirm \
 
 # START ##########################################################################################################################################
 
-RUN printf "[archlinuxcn]\nServer=https://repo.archlinuxcn.org/\$arch\n" >> /etc/pacman.conf && \
-        rm -fr /etc/pacman.d/gnupg && pacman-key --init && pacman-key --populate archlinux && \
-        pacman -Syyu --noconfirm archlinuxcn-keyring && \
-        pacman -S --noconfirm yay
-    
-RUN useradd builder && \
-        printf "123\n123\n" | passwd builder && \
-        mkdir -p /home/builder && \
-        chown builder /home/builder && \
-        chgrp builder /home/builder && \
-        echo "builder ALL=(ALL) NOPASSWD: /usr/bin/pacman" >> /etc/sudoers
-    
-    
-RUN pacman -S --noconfirm base-devel && \
-        su -l builder -c "yay -S --noconfirm noctalia-shell-git" && \
-        pacman -S --noconfirm builder
-
-USER root
-WORKDIR /
-
-# Cleanup
-RUN sed -i 's@#en_US.UTF-8@en_US.UTF-8@g' /etc/locale.gen && \
-    userdel -r build && \
-    rm -drf /home/build && \
-    sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers && \
-    sed -i '/root ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers && \
-    rm -rf /tmp/*
-
-# END ############################################################################################################################################
-
 # Workaround due to dracut version bump, please remove eventually
 # FIXME: remove
 RUN echo -e "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee /etc/dracut.conf.d/fix-bootc.conf
