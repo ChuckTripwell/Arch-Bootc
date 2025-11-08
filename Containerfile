@@ -41,33 +41,22 @@ RUN pacman -Syyuu --noconfirm \
 
 # START ##########################################################################################################################################
 
-# Pacman Initialization
-# Create build user
-RUN sed -i 's/#Color/Color/g' /etc/pacman.conf && \
-    printf "[multilib]\nInclude = /etc/pacman.d/mirrorlist\n" | tee -a /etc/pacman.conf && \
-    sed -i 's/#MAKEFLAGS="-j2"/MAKEFLAGS="-j$(nproc)"/g' /etc/makepkg.conf && \
-    pacman-key --init && pacman-key --populate && \
-    pacman -Syu --noconfirm && \
-    useradd -m --shell=/bin/bash build && usermod -L build && \
-    echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    pacman -Scc --noconfirm
-
-# Add paru and install AUR packages
-USER build
-WORKDIR /home/build
-RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
-    cd paru-bin && \
-    makepkg -si --noconfirm && \
-    cd .. && \
-    rm -drf paru-bin
-
-RUN paru -Syyuu --noconfirm \
-        steam-devices-git niri-git dms-shell-git dms-shell-git matugen-bin input-remapper-bin \
-\
-      ${DEV_DEPS} && \
-  pacman -S --clean --noconfirm && \
-  rm -rf /var/cache/pacman/pkg/*
+RUN printf "[archlinuxcn]\nServer=https://repo.archlinuxcn.org/\$arch\n" >> /etc/pacman.conf && \
+        rm -fr /etc/pacman.d/gnupg && pacman-key --init && pacman-key --populate archlinux && \
+        pacman -Syyu --noconfirm archlinuxcn-keyring && \
+        pacman -S --noconfirm yay
+    
+RUN useradd builder && \
+        printf "123\n123\n" | passwd builder && \
+        mkdir -p /home/builder && \
+        chown builder /home/builder && \
+        chgrp builder /home/builder && \
+        echo "builder ALL=(ALL) NOPASSWD: /usr/bin/pacman" >> /etc/sudoers
+    
+    
+RUN pacman -S --noconfirm base-devel && \
+        su -l builder -c "yay -S --noconfirm noctalia-shell-git" && \
+        pacman -S --noconfirm builder
 
 USER root
 WORKDIR /
