@@ -61,15 +61,14 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
     makepkg -si --noconfirm && \
     cd .. && \
     rm -drf paru-bin
-#    paru -S \
-#        aur/placeholder \
-#        --noconfirm
 
-#AUR Packages to install/Build
-RUN paru -Syyuu \
-        steam-devices-git niri-git noctalia-shell-git matugen-bin input-remapper-bin waydroid \
-\
-      --noconfirm
+RUN paru -S \
+        aur/steam-devices-git \
+        aur/niri-git \
+        aur/dms-shell-git \
+        aur/matugen-bin \
+        aur/input-remapper-bin \
+        --noconfirm
 
 USER root
 WORKDIR /
