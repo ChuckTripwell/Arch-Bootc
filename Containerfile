@@ -62,19 +62,25 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
     cd .. && \
     rm -drf paru-bin
 
-RUN paru -S --noconfirm --dbpath /tmp/pacmandb \
-    aur/steam-devices-git aur/niri-git aur/dms-shell-git aur/matugen-bin aur/input-remapper-bin
+RUN paru -S \
+        aur/steam-devices-git \
+        aur/uxplay \
+        aur/niri-git \
+        aur/dms-shell-git \
+        aur/matugen-bin \
+        aur/input-remapper-bin \
+        --noconfirm
 
 USER root
 WORKDIR /
 
 # Cleanup
-#RUN sed -i 's@#en_US.UTF-8@en_US.UTF-8@g' /etc/locale.gen && \
-#    userdel -r build && \
-#    rm -drf /home/build && \
-#    sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers && \
-#    sed -i '/root ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers && \
-#    rm -rf /tmp/*
+RUN sed -i 's@#en_US.UTF-8@en_US.UTF-8@g' /etc/locale.gen && \
+    userdel -r build && \
+    rm -drf /home/build && \
+    sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers && \
+    sed -i '/root ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers && \
+    rm -rf /tmp/*
 
 # END ############################################################################################################################################
 
