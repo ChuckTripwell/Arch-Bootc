@@ -19,8 +19,8 @@ RUN pacman -Sy --noconfirm \
       procs ripgrep tldr trash-cli tree usbutils vim wget wl-clipboard ydotool zsh zsh-completions\
 \
 #Drivers
-      amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver libva-nvidia-driver \
-      libva nvidia-open vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor \
+      amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
+      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor \
 \
 #Network / VPN / SMB
       dnsmasq freerdp2 iproute2 iwd libmtp networkmanager-l2tp networkmanager-openconnect networkmanager-openvpn networkmanager-pptp \
@@ -64,8 +64,9 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
 #    paru -S \
 #        aur/placeholder \
 #        --noconfirm
+RUN sudo pacman -S --needed yay
 
-RUN paru -S \
+RUN yay -S \
         aur/steam-devices-git \
         aur/uxplay \
         aur/niri-git \
