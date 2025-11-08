@@ -62,13 +62,8 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
     cd .. && \
     rm -drf paru-bin
 
-RUN rm -rf /var/lib/pacman/sync/* && paru -S \
-        aur/steam-devices-git \
-        aur/niri-git \
-        aur/dms-shell-git \
-        aur/matugen-bin \
-        aur/input-remapper-bin \
-        --noconfirm
+RUN paru -S --noconfirm --dbpath /tmp/pacmandb \
+    aur/steam-devices-git aur/niri-git aur/dms-shell-git aur/matugen-bin aur/input-remapper-bin
 
 USER root
 WORKDIR /
