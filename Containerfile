@@ -4,7 +4,7 @@ ENV DEV_DEPS="base-devel git rust"
 
 ENV DRACUT_NO_XATTR=1
 
-RUN pacman -Sy --noconfirm \
+RUN pacman -Syyuu --noconfirm \
 #Base packages
       base dracut linux linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow \
 \
@@ -15,7 +15,7 @@ RUN pacman -Sy --noconfirm \
       noto-fonts noto-fonts-cjk noto-fonts-emoji \
 \
 #CLI Utilities
-      bash-completion bat busybox duf fastfetch fd gping grml-zsh-config htop jq less lsof mcfly nano nix nvtop openssh powertop \
+      bash-completion bat busybox duf hyfetch fd gping grml-zsh-config htop jq less lsof mcfly nano nvtop openssh powertop \
       procs ripgrep tldr trash-cli tree usbutils vim wget wl-clipboard ydotool zsh zsh-completions yay \
 \
 #Drivers
@@ -30,7 +30,7 @@ RUN pacman -Sy --noconfirm \
       espeak-ng orca \
 \  
 #Pipewire
-      pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber \
+      pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber pipewire-jack \
 \
 #Printer
       cups cups-browsed gutenprint ipp-usb hplip splix system-config-printer \
@@ -65,7 +65,7 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
 #        aur/placeholder \
 #        --noconfirm
 
-RUN yay -S \
+RUN yay -Syyuu --noconfirm \
         aur/steam-devices-git \
         aur/uxplay \
         aur/niri-git \
