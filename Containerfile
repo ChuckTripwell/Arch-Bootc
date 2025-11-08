@@ -16,7 +16,7 @@ RUN pacman -Sy --noconfirm \
 \
 #CLI Utilities
       bash-completion bat busybox duf fastfetch fd gping grml-zsh-config htop jq less lsof mcfly nano nix nvtop openssh powertop \
-      procs ripgrep tldr trash-cli tree usbutils vim wget wl-clipboard ydotool zsh zsh-completions\
+      procs ripgrep tldr trash-cli tree usbutils vim wget wl-clipboard ydotool zsh zsh-completions yay \
 \
 #Drivers
       amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
@@ -64,8 +64,6 @@ RUN git clone https://aur.archlinux.org/paru-bin.git --single-branch && \
 #    paru -S \
 #        aur/placeholder \
 #        --noconfirm
-
-RUN pacman -S --needed yay
 
 RUN yay -S \
         aur/steam-devices-git \
