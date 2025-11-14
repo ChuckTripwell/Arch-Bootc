@@ -1,7 +1,7 @@
-FROM scratch AS ctx
+#FROM scratch AS ctx
 
-COPY build_scripts /build
-COPY system_files /files
+#COPY build_scripts /build
+#COPY system_files /files
 
 FROM docker.io/cachyos/cachyos-v3:latest
 
@@ -216,10 +216,10 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     echo "d /run/media 0755 root root -" | tee -a /usr/lib/tmpfiles.d/bootc-base-dirs.conf && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
 
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/var \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/build/00-theme.sh
+#RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+#    --mount=type=tmpfs,dst=/var \
+#    --mount=type=tmpfs,dst=/tmp \
+#    /ctx/build/00-theme.sh
 
 RUN cd /usr/etc/sddm.conf.d/ && wget https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/system_files/usr/etc/sddm.conf.d/10-wayland.conf
 
