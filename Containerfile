@@ -1,3 +1,8 @@
+FROM scratch AS ctx
+
+COPY build_scripts /build
+COPY system_files /files
+
 FROM docker.io/cachyos/cachyos-v3:latest
 
 ENV DEV_DEPS="base-devel git rust"
@@ -73,7 +78,21 @@ RUN pacman -S --noconfirm amd-ucode intel-ucode edk2-shell efibootmgr shim mesa 
 #      filelight kdegraphics-thumbnailers kdenetwork-filesharing kio-admin kompare purpose matugen \
 #      accountsservice dgop cliphist cava qt6ct brightnessctl wlsunset ddcutil xdg-utils
 
-RUN pacman -S --noconfirm sddm-idle plasma-desktop plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
+
+
+RUN useradd -m -s /bin/bash aur && \
+    echo "aur ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/aur && \
+    mkdir -p /tmp_aur_build && chown -R aur /tmp_aur_build && \
+    install-packages-build git base-devel; \
+    runuser -u aur -- env -C /tmp_aur_build git clone 'https://aur.archlinux.org/paru-bin.git' && \
+    runuser -u aur -- env -C /tmp_aur_build/paru-bin makepkg -si --noconfirm && \
+    rm -rf /tmp_aur_build && \
+    runuser -u aur -- paru -S --noconfirm sddm-idle; \
+    userdel -rf aur; rm -rf /home/aur /etc/sudoers.d/aur
+
+
+
+RUN pacman -S --noconfirm plasma-desktop plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
 
 # Add Maple Mono font.
 #RUN mkdir -p "/usr/share/fonts/Maple Mono" \
@@ -211,15 +230,5 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     echo "d /run/media 0755 root root -" | tee -a /usr/lib/tmpfiles.d/bootc-base-dirs.conf && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
 
-#RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-#    --mount=type=tmpfs,dst=/var \
-#    --mount=type=tmpfs,dst=/tmp \
-#    /ctx/build/00-theme.sh
-
-
-
-
-
-# RUN cd /usr/etc/sddm.conf.d/ && wget https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/system_files/usr/etc/sddm.conf.d/10-wayland.conf
 
 RUN bootc container lint
