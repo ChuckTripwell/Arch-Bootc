@@ -221,4 +221,6 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build/00-theme.sh
 
+RUN cd /usr/etc/sddm.conf.d/ && wget https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/system_files/usr/etc/sddm.conf.d/10-wayland.conf
+
 RUN bootc container lint
