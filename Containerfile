@@ -1,8 +1,3 @@
-#FROM scratch AS ctx
-
-#COPY build_scripts /build
-#COPY system_files /files
-
 FROM docker.io/cachyos/cachyos-v3:latest
 
 ENV DEV_DEPS="base-devel git rust"
@@ -78,7 +73,7 @@ RUN pacman -S --noconfirm amd-ucode intel-ucode edk2-shell efibootmgr shim mesa 
 #      filelight kdegraphics-thumbnailers kdenetwork-filesharing kio-admin kompare purpose matugen \
 #      accountsservice dgop cliphist cava qt6ct brightnessctl wlsunset ddcutil xdg-utils
 
-RUN pacman -S --noconfirm plasma-desktop sddm-kcm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
+RUN pacman -S --noconfirm sddm-idle plasma-desktop plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
 
 # Add Maple Mono font.
 #RUN mkdir -p "/usr/share/fonts/Maple Mono" \
@@ -222,19 +217,6 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
 #    /ctx/build/00-theme.sh
 
 
-
-# Ensure /etc/sddm.conf.d exists (overlay allows writes)
-RUN mkdir -p /etc/sddm.conf.d
-
-# Add your 10-wayland.conf
-RUN cat << 'EOF' > /etc/sddm.conf.d/10-wayland.conf
-[General]
-DisplayServer=wayland
-GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell
-
-[Wayland]
-CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1
-EOF
 
 
 
