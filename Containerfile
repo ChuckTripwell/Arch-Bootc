@@ -63,8 +63,8 @@ RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos-deckify 
 #      starship
 
 # Drivers
-#RUN pacman -S --noconfirm amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
-#      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
+RUN pacman -S --noconfirm amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
+      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
 
 # Network / VPN / SMB
 #RUN pacman -S --noconfirm dnsmasq freerdp2 iproute2 iwd libmtp networkmanager-l2tp networkmanager-openconnect networkmanager-openvpn networkmanager-pptp \
@@ -78,9 +78,9 @@ RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos-deckify 
 #      filelight kdegraphics-thumbnailers kdenetwork-filesharing kio-admin kompare purpose matugen \
 #      accountsservice dgop cliphist cava qt6ct brightnessctl wlsunset ddcutil xdg-utils
 
-#RUN pacman -S --noconfirm sddm
+RUN pacman -S --noconfirm sddm
 
-RUN pkgs=$(pacman -Slq | grep -Fx -f <(curl -fsSL https://codeberg.org/Dwdeath/parent-lock_for_cachyos-handheld/raw/branch/main/Package_list.txt)) ; [ -n "$pkgs" ] && pacman -S --needed $pkgs || true
+#RUN pkgs=$(pacman -Slq | grep -Fx -f <(curl -fsSL https://codeberg.org/Dwdeath/parent-lock_for_cachyos-handheld/raw/branch/main/Package_list.txt)) ; [ -n "$pkgs" ] && pacman -S --needed $pkgs || true
 
 RUN pacman -S --noconfirm plasma-desktop plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
 
