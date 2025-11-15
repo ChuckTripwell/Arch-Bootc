@@ -215,7 +215,9 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
 
 RUN mkdir -p /usr/lib/sddm/sddm.conf.d && \
-    cat << "EOF" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+    touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+
+RUN cat << "EOF" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 [General]
 DisplayServer=wayland
 GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell
