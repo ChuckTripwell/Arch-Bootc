@@ -67,20 +67,20 @@ RUN pacman -S --noconfirm amd-ucode intel-ucode edk2-shell efibootmgr shim mesa 
       vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
 
 # Network / VPN / SMB
-#RUN pacman -S --noconfirm dnsmasq freerdp2 iproute2 iwd libmtp networkmanager-l2tp networkmanager-openconnect networkmanager-openvpn networkmanager-pptp \
-#      networkmanager-strongswan networkmanager-vpnc nfs-utils nss-mdns networkmanager
+RUN pacman -S --noconfirm dnsmasq freerdp2 iproute2 iwd libmtp networkmanager-l2tp networkmanager-openconnect networkmanager-openvpn networkmanager-pptp \
+      networkmanager-strongswan networkmanager-vpnc nfs-utils nss-mdns networkmanager
 
 # Pipewire
-#RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
+RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
 
 # Desktop Environment needs
 #RUN pacman -S --noconfirm udiskie polkit-kde-agent xwayland-satellite xdg-desktop-portal-kde xdg-desktop-portal xdg-user-dirs \
 #      filelight kdegraphics-thumbnailers kdenetwork-filesharing kio-admin kompare purpose matugen \
 #      accountsservice dgop cliphist cava qt6ct brightnessctl wlsunset ddcutil xdg-utils
 
-RUN pacman -S --noconfirm sddm
+#RUN pacman -S --noconfirm sddm
 
-#RUN pkgs=$(pacman -Slq | grep -Fx -f <(curl -fsSL https://codeberg.org/Dwdeath/parent-lock_for_cachyos-handheld/raw/branch/main/Package_list.txt)) ; [ -n "$pkgs" ] && pacman -S --needed $pkgs || true
+RUN pkgs=$(pacman -Slq | grep -Fx -f <(curl -fsSL https://codeberg.org/Dwdeath/parent-lock_for_cachyos-handheld/raw/branch/main/Package_list.txt)) ; [ -n "$pkgs" ] && pacman -S --needed $pkgs || true
 
 RUN pacman -S --noconfirm plasma-desktop plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
 
@@ -228,7 +228,6 @@ GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell
 [Wayland]
 CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1
 EOF
-
 
 
 
