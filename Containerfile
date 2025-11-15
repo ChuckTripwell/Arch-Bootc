@@ -80,7 +80,7 @@ RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffa
 
 #RUN pacman -S --noconfirm sddm
 
-RUN pkgs=$(pacman -Slq | grep -Fx -f <(curl -fsSL https://codeberg.org/Dwdeath/parent-lock_for_cachyos-handheld/raw/branch/main/Package_list.txt)) ; [ -n "$pkgs" ] && pacman -S --needed $pkgs || true
+#RUN pkgs=$(pacman -Slq | grep -Fx -f <(curl -fsSL https://codeberg.org/Dwdeath/parent-lock_for_cachyos-handheld/raw/branch/main/Package_list.txt)) ; [ -n "$pkgs" ] && pacman -S --needed $pkgs || true
 
 RUN pacman -S --noconfirm plasma-desktop plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
 
