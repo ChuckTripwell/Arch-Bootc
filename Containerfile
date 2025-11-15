@@ -1,3 +1,5 @@
+FROM ghcr.io/ublue-os/bazzite:latest AS bazzite
+
 FROM docker.io/cachyos/cachyos-v3:latest
 
 ENV DEV_DEPS="base-devel git rust"
@@ -45,6 +47,14 @@ RUN pacman -Syu --noconfirm
 # Section 1 - Package Installs | We grab every package we can from official arch repo/set up all non-flatpak apps for user ^^ ##########
 ########################################################################################################################################
 
+
+# moving libs
+COPY --from=bazzite /lib /lib
+COPY --from=bazzite /usr/lib /usr/lib
+COPY --from=bazzite /usr/local/lib /usr/local/lib
+COPY --from=bazzite /lib64 /lib64
+COPY --from=bazzite /usr/lib64 /usr/lib64
+
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
 RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 shadow
 
@@ -58,12 +68,12 @@ RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos linux-fi
 #      starship
 
 # Drivers
-RUN pacman -S --noconfirm amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
-      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
+#RUN pacman -S --noconfirm amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
+#      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
 
 # Network / VPN / SMB
-RUN pacman -S --noconfirm dnsmasq freerdp2 iproute2 iwd libmtp networkmanager-l2tp networkmanager-openconnect networkmanager-openvpn networkmanager-pptp \
-      networkmanager-strongswan networkmanager-vpnc nfs-utils nss-mdns networkmanager
+#RUN pacman -S --noconfirm dnsmasq freerdp2 iproute2 iwd libmtp networkmanager-l2tp networkmanager-openconnect networkmanager-openvpn networkmanager-pptp \
+#      networkmanager-strongswan networkmanager-vpnc nfs-utils nss-mdns networkmanager
 
 # Pipewire
 RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
