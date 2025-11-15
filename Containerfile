@@ -80,7 +80,7 @@ RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos-deckify 
 
 #RUN pacman -S --noconfirm sddm
 
-RUN pacman -S --noconfirm $(curl https://codeberg.org/Dwdeath/parent-lock_for_cachyos-handheld/raw/branch/main/Package_list.txt) grub
+RUN pacman -S --needed --noconfirm $(curl https://codeberg.org/Dwdeath/parent-lock_for_cachyos-handheld/raw/branch/main/Package_list.txt) grub
 
 RUN pacman -S --noconfirm plasma-desktop plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
 
