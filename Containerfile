@@ -51,7 +51,7 @@ RUN pacman -Syu --noconfirm
 ########################################################################################################################################
 
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
-RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 shadow
+RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos-deckify linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 shadow
 
 # Media/Install utilities/Media drivers
 #RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli \
