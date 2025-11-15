@@ -214,17 +214,16 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     echo "d /run/media 0755 root root -" | tee -a /usr/lib/tmpfiles.d/bootc-base-dirs.conf && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
 
+RUN mkdir -p /usr/lib/sddm/sddm.conf.d && \
+    cat << "EOF" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+[General]
+DisplayServer=wayland
+GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell
 
-RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-
-RUN cat > /usr/lib/sddm/sddm.conf.d/10-wayland.conf << "EOF" \
-[General] \
-DisplayServer=wayland \
-GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell \
-\
-[Wayland] \
-CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1 \
+[Wayland]
+CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1
 EOF
+
 
 
 
