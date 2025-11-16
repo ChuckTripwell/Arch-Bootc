@@ -38,7 +38,7 @@ RUN pacman-key --init
 
 RUN pacman-key --populate archlinux
 
-RUN echo -e "[immutablearch]\nSigLevel = Optional TrustAll\nServer = https://immutablearch.github.io/packages/aur-repo/" \ >> /etc/pacman.conf
+RUN echo -e "\n[immutablearch]\nSigLevel = Optional TrustAll\nServer = https://immutablearch.github.io/packages/aur-repo/" \ >> /etc/pacman.conf
 
 # Refresh the package database to retrieve packages.
 RUN pacman -Syu --noconfirm
@@ -48,7 +48,7 @@ RUN pacman -Syu --noconfirm
 ########################################################################################################################################
 
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
-RUN pacman -S --noconfirm base dracut linux-cachyos-deckify linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow grub
+RUN pacman -S --noconfirm base dracut cachyos-deckify linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow grub
 
 
 
@@ -110,7 +110,7 @@ RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffa
 #      qt6ct breeze brightnessctl wlsunset ddcutil xdg-utils
 
 # User frontend programs/apps
-RUN pacman -S --noconfirm steam scx-scheds scx-manager gnome-disk-utility
+RUN pacman -S --noconfirm scx-scheds scx-manager gnome-disk-utility
 
 # Add Maple Mono font, it's so cute! It's a pain to download! You'll love it.
 #RUN mkdir -p "/usr/share/fonts/Maple Mono" \
@@ -158,7 +158,7 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
 
 #RUN pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
 
-#RUN echo -e '[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist' >> /etc/pacman.conf
+#RUN echo -e '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist' >> /etc/pacman.conf
 
 #RUN pacman -Sy --noconfirm
 
