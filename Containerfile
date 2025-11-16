@@ -55,7 +55,7 @@ RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/hea
 
 
 # Media/Install utilities/Media drivers
-#RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid ddcutil dmidecode mesa-utils ntfs-3g \
+RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid ddcutil dmidecode mesa-utils ntfs-3g \
       vulkan-tools wayland-utils playerctl
 
 # Fonts
@@ -63,11 +63,11 @@ RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/hea
 
 # CLI Utilities
 #RUN pacman -S --noconfirm sudo bash bash-completion fastfetch btop jq less lsof nano openssh powertop man-db \
-      tree usbutils vim wget wl-clipboard unzip ptyxis glibc-locales tar udev starship tuned-ppd tuned hyfetch docker podman curl
+#      tree usbutils vim wget wl-clipboard unzip ptyxis glibc-locales tar udev starship tuned-ppd tuned hyfetch docker podman curl
 
 # Drivers
-#RUN pacman -S --noconfirm amd-ucode intel-ucode efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
-#      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
+RUN pacman -S --noconfirm amd-ucode intel-ucode efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
+      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
 
 # Network / VPN / SMB
 #RUN pacman -S --noconfirm libmtp networkmanager-openconnect networkmanager-openvpn nss-mdns samba smbclient networkmanager firewalld
