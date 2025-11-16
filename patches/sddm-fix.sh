@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+# force sddm to work in Wayland
+
 mkdir -p /usr/lib/sddm/sddm.conf.d
 touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 
