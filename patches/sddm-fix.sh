@@ -12,4 +12,5 @@ echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 
-#systemctl enable sddm
+# enable sddm
+systemctl enable sddm
