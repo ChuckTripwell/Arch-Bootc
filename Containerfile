@@ -38,6 +38,8 @@ RUN pacman-key --init
 
 RUN pacman-key --populate archlinux
 
+RUN echo -e "[immutablearch]\nSigLevel = Optional TrustAll\nServer = https://immutablearch.github.io/packages/aur-repo/" \ >> /etc/pacman.conf
+
 # Refresh the package database to retrieve packages.
 RUN pacman -Syu --noconfirm
 
@@ -47,6 +49,24 @@ RUN pacman -Syu --noconfirm
 
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
 RUN pacman -S --noconfirm base dracut linux-cachyos-deckify linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow grub
+
+
+
+RUN pacman -S --noconfirm \
+    bootupd-git \
+    skopeo \
+    git \
+    cosign \
+    buildah \
+    ostree \
+    tar \
+    dracut \
+    arch-install-scripts \
+    zstd \
+    rust \
+    pacman-ostree
+
+
 
 
 # install usecase-specific packages.
