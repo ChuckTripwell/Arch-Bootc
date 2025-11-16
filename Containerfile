@@ -74,7 +74,7 @@ RUN pacman -S --noconfirm amd-ucode intel-ucode efibootmgr shim mesa libva-intel
 RUN pacman -S --noconfirm libmtp networkmanager-openconnect networkmanager-openvpn nss-mdns samba smbclient networkmanager firewalld
 
 # Accessibility
-#RUN pacman -S --noconfirm espeak-ng orca
+RUN pacman -S --noconfirm plasma-keyboard espeak-ng orca
 
 # Pipewire
 RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
