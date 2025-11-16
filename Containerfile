@@ -60,7 +60,7 @@ RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid 
       vulkan-tools wayland-utils playerctl
 
 # Fonts
-#RUN pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji
+RUN pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji
 
 # CLI Utilities
 RUN pacman -S --noconfirm sudo bash bash-completion fastfetch btop jq less lsof nano openssh powertop man-db \
@@ -71,13 +71,13 @@ RUN pacman -S --noconfirm amd-ucode intel-ucode efibootmgr shim mesa libva-intel
       vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
 
 # Network / VPN / SMB
-#RUN pacman -S --noconfirm libmtp networkmanager-openconnect networkmanager-openvpn nss-mdns samba smbclient networkmanager firewalld
+RUN pacman -S --noconfirm libmtp networkmanager-openconnect networkmanager-openvpn nss-mdns samba smbclient networkmanager firewalld
 
 # Accessibility
 #RUN pacman -S --noconfirm espeak-ng orca
 
 # Pipewire
-#RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
+RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
 
 # Printer
 #RUN pacman -S --noconfirm cups cups-browsed hplip
@@ -88,7 +88,7 @@ RUN pacman -S --noconfirm amd-ucode intel-ucode efibootmgr shim mesa libva-intel
 #      qt6ct breeze brightnessctl wlsunset ddcutil xdg-utils
 
 # User frontend programs/apps
-#RUN pacman -S --noconfirm steam scx-scheds scx-manager gnome-disk-utility
+RUN pacman -S --noconfirm steam scx-scheds scx-manager gnome-disk-utility
 
 # Add Maple Mono font, it's so cute! It's a pain to download! You'll love it.
 #RUN mkdir -p "/usr/share/fonts/Maple Mono" \
