@@ -50,8 +50,8 @@ RUN pacman -S --noconfirm base dracut linux-cachyos-deckify linux-firmware ostre
 
 
 # install usecase-specific packages.
-RUN pacman -S --noconfirm cachyos-handheld cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools 
-RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox alacritty
+RUN pacman -S --noconfirm cachyos-handheld cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools
+RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox alacritty waydroid
 
 
 
@@ -64,7 +64,7 @@ RUN pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji
 
 # CLI Utilities
 RUN pacman -S --noconfirm sudo bash bash-completion fastfetch btop jq less lsof nano openssh powertop man-db \
-      tree usbutils vim wget wl-clipboard unzip ptyxis glibc-locales tar udev starship tuned-ppd tuned hyfetch docker podman curl
+      tree usbutils vim wget wl-clipboard unzip glibc-locales tar udev starship tuned-ppd tuned hyfetch docker podman curl
 
 # Drivers
 RUN pacman -S --noconfirm amd-ucode intel-ucode efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
