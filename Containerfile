@@ -48,40 +48,46 @@ RUN pacman -Syu --noconfirm
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
 RUN pacman -S --noconfirm base dracut linux-cachyos-bore linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow
 
+
+# install usecase-specific packages.
+RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/package-installs.sh|bash
+
+
+
 # Media/Install utilities/Media drivers
-RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid ddcutil dmidecode mesa-utils ntfs-3g \
+#RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid ddcutil dmidecode mesa-utils ntfs-3g \
       vulkan-tools wayland-utils playerctl
 
 # Fonts
-RUN pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji
+#RUN pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji
 
 # CLI Utilities
-RUN pacman -S --noconfirm sudo bash bash-completion fastfetch btop jq less lsof nano openssh powertop man-db \
+#RUN pacman -S --noconfirm sudo bash bash-completion fastfetch btop jq less lsof nano openssh powertop man-db \
       tree usbutils vim wget wl-clipboard unzip ptyxis glibc-locales tar udev starship tuned-ppd tuned hyfetch docker podman curl
 
 # Drivers
-RUN pacman -S --noconfirm amd-ucode intel-ucode efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
+#RUN pacman -S --noconfirm amd-ucode intel-ucode efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
       vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
 
 # Network / VPN / SMB
-RUN pacman -S --noconfirm libmtp networkmanager-openconnect networkmanager-openvpn nss-mdns samba smbclient networkmanager firewalld
+#RUN pacman -S --noconfirm libmtp networkmanager-openconnect networkmanager-openvpn nss-mdns samba smbclient networkmanager firewalld
 
 # Accessibility
-RUN pacman -S --noconfirm espeak-ng orca
+#RUN pacman -S --noconfirm espeak-ng orca
 
 # Pipewire
-RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
+#RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
 
 # Printer
-RUN pacman -S --noconfirm cups cups-browsed hplip
+#RUN pacman -S --noconfirm cups cups-browsed hplip
 
 # Desktop Environment needs
-RUN pacman -S --noconfirm greetd udiskie xwayland-satellite greetd-tuigreet xdg-desktop-portal-kde xdg-desktop-portal xdg-user-dirs xdg-desktop-portal-gnome \
-      ffmpegthumbs kdegraphics-thumbnailers kdenetwork-filesharing kio-admin chezmoi matugen accountsservice quickshell dgop cliphist cava dolphin \ 
-      qt6ct breeze brightnessctl wlsunset ddcutil xdg-utils
+#RUN pacman -S --noconfirm greetd udiskie xwayland-satellite greetd-tuigreet xdg-desktop-portal-kde xdg-desktop-portal xdg-user-dirs xdg-desktop-portal-gnome \
+#      ffmpegthumbs kdegraphics-thumbnailers kdenetwork-filesharing kio-admin chezmoi matugen accountsservice quickshell dgop cliphist cava dolphin \ 
+#      qt6ct breeze brightnessctl wlsunset ddcutil xdg-utils
 
 # User frontend programs/apps
-RUN pacman -S --noconfirm steam scx-scheds scx-manager gnome-disk-utility
+#RUN pacman -S --noconfirm steam scx-scheds scx-manager gnome-disk-utility
 
 # Add Maple Mono font, it's so cute! It's a pain to download! You'll love it.
 RUN mkdir -p "/usr/share/fonts/Maple Mono" \
@@ -314,7 +320,7 @@ RUN pacman -Sy --noconfirm --needed curl
 RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/permissions-fix.sh|bash
 
 # install usecase-specific packages.
-RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/package-installs.sh|bash
+#RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/package-installs.sh|bash
 
 # forces sddm to use Wayland.
 RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/sddm-fix.sh|bash
