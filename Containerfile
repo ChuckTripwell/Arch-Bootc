@@ -67,7 +67,7 @@ RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/hea
 
 # Drivers
 #RUN pacman -S --noconfirm amd-ucode intel-ucode efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
-      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
+#      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
 
 # Network / VPN / SMB
 #RUN pacman -S --noconfirm libmtp networkmanager-openconnect networkmanager-openvpn nss-mdns samba smbclient networkmanager firewalld
