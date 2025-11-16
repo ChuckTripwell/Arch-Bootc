@@ -127,27 +127,25 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
 # Section 3 - Chaotic AUR # We grab some precompiled packages from the Chaotic AUR for things not on Arch repos/better updated~ ########
 ########################################################################################################################################
 
-RUN pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+#RUN pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 
-RUN pacman-key --init && pacman-key --lsign-key 3056513887B78AEB
+#RUN pacman-key --init && pacman-key --lsign-key 3056513887B78AEB
 
-RUN pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' --noconfirm
+#RUN pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' --noconfirm
 
-RUN pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
+#RUN pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
 
-RUN echo -e '[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist' >> /etc/pacman.conf
+#RUN echo -e '[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist' >> /etc/pacman.conf
 
-RUN pacman -Sy --noconfirm
+#RUN pacman -Sy --noconfirm
 
 # Package list: niri-git | input-remapper-git | vesktop | sc-controller | flatpak-git | dms-shell-git | ttf-twemoji |
 # ttf-symbola | opentabletdriver | yay
 
-RUN pacman -S \
-      chaotic-aur/input-remapper-git chaotic-aur/sc-controller chaotic-aur/flatpak-git \
-      chaotic-aur/ttf-twemoji chaotic-aur/ttf-symbola chaotic-aur/opentabletdriver \
-      --noconfirm
-
-RUN systemctl enable greetd
+#RUN pacman -S \
+#      chaotic-aur/input-remapper-git chaotic-aur/sc-controller chaotic-aur/flatpak-git \
+#      chaotic-aur/ttf-twemoji chaotic-aur/ttf-symbola chaotic-aur/opentabletdriver \
+#      --noconfirm
 
 ########################################################################################################################################
 # Section 4 Flatpaks preinstalls | We love containers, flatpaks, and protecting installs from breaking! ################################
