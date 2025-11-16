@@ -48,6 +48,21 @@ RUN pacman -Syu --noconfirm
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
 RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 shadow
 
+RUN pacman -S --noconfirm sddm-kcm
+
+RUN mkdir -p /usr/lib/sddm/sddm.conf.d && \
+    touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+
+
+RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+
+
+
 # Media/Install utilities/Media drivers
 RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli \
       vulkan-tools wayland-utils playerctl
@@ -73,7 +88,7 @@ RUN pacman -S --noconfirm amd-ucode intel-ucode edk2-shell efibootmgr shim mesa 
 #      filelight kdegraphics-thumbnailers kdenetwork-filesharing kio-admin kompare purpose matugen \
 #      accountsservice dgop cliphist cava qt6ct brightnessctl wlsunset ddcutil xdg-utils
 
-RUN pacman -S --noconfirm plasma-desktop sddm-kcm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
+RUN pacman -S --noconfirm plasma-desktop plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
 
 # Add Maple Mono font.
 #RUN mkdir -p "/usr/share/fonts/Maple Mono" \
@@ -210,21 +225,6 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     echo "d /var/roothome 0700 root root -" | tee -a /usr/lib/tmpfiles.d/bootc-base-dirs.conf && \
     echo "d /run/media 0755 root root -" | tee -a /usr/lib/tmpfiles.d/bootc-base-dirs.conf && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
-
-
-
-RUN mkdir -p /usr/lib/sddm/sddm.conf.d && \
-    touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-
-RUN cat << "EOF" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-[General]
-DisplayServer=wayland
-GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell
-
-[Wayland]
-CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1
-EOF
-
 
 
 
