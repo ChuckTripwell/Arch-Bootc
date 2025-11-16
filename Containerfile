@@ -53,6 +53,8 @@ RUN pacman -S --noconfirm base dracut linux-cachyos-deckify linux-firmware ostre
 
 
 RUN pacman -S --noconfirm \
+    shim-fedora \
+    grub-efi \
     bootupd-git \
     skopeo \
     git \
