@@ -1,5 +1,3 @@
-FROM ghcr.io/ublue-os/bazzite:latest AS bazzite
-
 FROM docker.io/cachyos/cachyos-v3:latest
 
 ENV DEV_DEPS="base-devel git rust"
@@ -47,20 +45,12 @@ RUN pacman -Syu --noconfirm
 # Section 1 - Package Installs | We grab every package we can from official arch repo/set up all non-flatpak apps for user ^^ ##########
 ########################################################################################################################################
 
-
-# moving libs
-COPY --from=bazzite /lib /lib
-COPY --from=bazzite /usr/lib /usr/lib
-COPY --from=bazzite /usr/local/lib /usr/local/lib
-COPY --from=bazzite /lib64 /lib64
-COPY --from=bazzite /usr/lib64 /usr/lib64
-
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
 RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 shadow
 
 # Media/Install utilities/Media drivers
-#RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli \
-#      vulkan-tools wayland-utils playerctl
+RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli \
+      vulkan-tools wayland-utils playerctl
 
 # CLI Utilities
 #RUN pacman -S --noconfirm sudo bash bash-completion bat busybox duf fastfetch gping jq lsof mcfly powertop \
@@ -68,26 +58,22 @@ RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos linux-fi
 #      starship
 
 # Drivers
-#RUN pacman -S --noconfirm amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
-#      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
+RUN pacman -S --noconfirm amd-ucode intel-ucode edk2-shell efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
+      vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor
 
 # Network / VPN / SMB
 #RUN pacman -S --noconfirm dnsmasq freerdp2 iproute2 iwd libmtp networkmanager-l2tp networkmanager-openconnect networkmanager-openvpn networkmanager-pptp \
 #      networkmanager-strongswan networkmanager-vpnc nfs-utils nss-mdns networkmanager
 
 # Pipewire
-RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
+#RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
 
 # Desktop Environment needs
 #RUN pacman -S --noconfirm udiskie polkit-kde-agent xwayland-satellite xdg-desktop-portal-kde xdg-desktop-portal xdg-user-dirs \
 #      filelight kdegraphics-thumbnailers kdenetwork-filesharing kio-admin kompare purpose matugen \
 #      accountsservice dgop cliphist cava qt6ct brightnessctl wlsunset ddcutil xdg-utils
 
-RUN pacman -S --noconfirm sddm
-
-#RUN pkgs=$(pacman -Slq | grep -Fx -f <(curl -fsSL https://codeberg.org/Dwdeath/parent-lock_for_cachyos-handheld/raw/branch/main/Package_list.txt)) ; [ -n "$pkgs" ] && pacman -S --needed $pkgs || true
-
-RUN pacman -S --noconfirm plasma-desktop plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
+RUN pacman -S --noconfirm plasma-desktop sddm-kcm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman ptyxis
 
 # Add Maple Mono font.
 #RUN mkdir -p "/usr/share/fonts/Maple Mono" \
@@ -132,6 +118,7 @@ RUN echo -ne '[Flatpak Preinstall io.github.kolunmi.Bazaar]\nBranch=stable\nIsRu
 
 # fix user permissions
 RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
+
 RUN systemctl enable polkit
 
 # Set up zram, this will help users not run out of memory.
@@ -223,6 +210,8 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     echo "d /var/roothome 0700 root root -" | tee -a /usr/lib/tmpfiles.d/bootc-base-dirs.conf && \
     echo "d /run/media 0755 root root -" | tee -a /usr/lib/tmpfiles.d/bootc-base-dirs.conf && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
+
+
 
 RUN mkdir -p /usr/lib/sddm/sddm.conf.d && \
     touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
