@@ -51,7 +51,7 @@ RUN pacman -S --noconfirm base dracut linux-cachyos-deckify linux-firmware ostre
 
 # install usecase-specific packages.
 RUN pacman -S --noconfirm cachyos-handheld cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools
-RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox alacritty waydroid
+RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox alacritty waydroid topgrade just
 
 
 
