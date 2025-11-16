@@ -48,11 +48,10 @@ RUN pacman -Syu --noconfirm
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
 RUN pacman -S --noconfirm base base-devel git rust dracut linux-cachyos linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 shadow
 
-RUN pacman -S --noconfirm sddm-kcm
+RUN pacman -S --noconfirm sddm-kcm sddm
 
 RUN mkdir -p /usr/lib/sddm/sddm.conf.d && \
     touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-
 
 RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
@@ -61,6 +60,7 @@ RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 
+RUN systemctl enable sddm
 
 
 # Media/Install utilities/Media drivers
