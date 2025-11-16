@@ -50,7 +50,8 @@ RUN pacman -S --noconfirm base dracut linux-cachyos-deckify linux-firmware ostre
 
 
 # install usecase-specific packages.
-RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/package-installs.sh|bash
+RUN pacman -S --noconfirm cachyos-handheld cachyos-deckify-headers cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools 
+RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox alacritty
 
 
 
@@ -312,7 +313,7 @@ net.ipv4.tcp_congestion_control=bbr\n' > /etc/sysctl.d/99-bbr3.conf
 # Section 7 - Patches #################################################################################################################
 ########################################################################################################################################
 
-RUN pacman -Sy --noconfirm --needed curl
+#RUN pacman -Sy --noconfirm --needed curl
 
 # fix user permissions.
 RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/permissions-fix.sh|bash
