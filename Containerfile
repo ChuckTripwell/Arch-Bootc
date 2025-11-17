@@ -407,7 +407,8 @@ RUN echo '[Install]' >> /usr/lib/systemd/system/boot-check.service
 RUN echo 'WantedBy=default.target' >> /usr/lib/systemd/system/boot-check.service
 
 # Enable the service
-RUN systemctl enable boot-check.service
+RUN systemctl enable bazzite-grub-boot-success.timer
+RUN systemctl enable bazzite-grub-boot-success.service
 
 
 
