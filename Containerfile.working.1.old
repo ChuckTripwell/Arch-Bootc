@@ -63,6 +63,31 @@ RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-short
 RUN systemctl enable sddm
 
 
+
+
+
+
+
+RUN useradd -m -s /bin/bash aur && \
+    echo "aur ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/aur && \
+    mkdir -p /tmp_aur_build && chown -R aur /tmp_aur_build && \
+    install-packages-build git base-devel; \
+    runuser -u aur -- env -C /tmp_aur_build git clone 'https://aur.archlinux.org/paru-bin.git' && \
+    runuser -u aur -- env -C /tmp_aur_build/paru-bin makepkg -si --noconfirm && \
+    rm -rf /tmp_aur_build && \
+    runuser -u aur -- paru -S --noconfirm pacman-ostree bootupd-git bootc; \
+    userdel -rf aur; rm -rf /home/aur /etc/sudoers.d/aur
+
+
+
+
+
+
+
+
+
+
+
 # Media/Install utilities/Media drivers
 RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid aha clinfo ddcutil dmidecode mesa-utils ntfs-3g nvme-cli \
       vulkan-tools wayland-utils playerctl
