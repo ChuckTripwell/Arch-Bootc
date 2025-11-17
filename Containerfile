@@ -393,38 +393,34 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     echo "d /run/media 0755 root root -" | tee -a /usr/lib/tmpfiles.d/bootc-base-dirs.conf && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
 
-
 # Create the boot-check script
-cat << 'EOF' > /usr/local/bin/boot-check.sh
-#!/bin/bash
-sleep 180
-status=$(systemctl is-system-running)
-failed_units=$(systemctl --failed --no-legend | wc -l)
-if [[ "$status" == "running" && "$failed_units" -eq 0 ]]; then
-    sudo ostree admin mark-success
-else
-    echo "OSTree deployment failed."
-fi
-EOF
-chmod +x /usr/local/bin/boot-check.sh
+RUN echo '#!/bin/bash' > /usr/local/bin/boot-check.sh
+RUN echo 'sleep 180' >> /usr/local/bin/boot-check.sh
+RUN echo 'status=$(systemctl is-system-running)' >> /usr/local/bin/boot-check.sh
+RUN echo 'failed_units=$(systemctl --failed --no-legend | wc -l)' >> /usr/local/bin/boot-check.sh
+RUN echo 'if [[ "$status" == "running" && "$failed_units" -eq 0 ]]; then' >> /usr/local/bin/boot-check.sh
+RUN echo '    sudo ostree admin mark-success' >> /usr/local/bin/boot-check.sh
+RUN echo 'else' >> /usr/local/bin/boot-check.sh
+RUN echo '    echo "OSTree deployment failed."' >> /usr/local/bin/boot-check.sh
+RUN echo 'fi' >> /usr/local/bin/boot-check.sh
+RUN chmod +x /usr/local/bin/boot-check.sh
 
 # Create the systemd service
-cat << 'EOF' > /etc/systemd/system/boot-check.service
-[Unit]
-Description=OSTree 3-Minute Boot Check
-After=graphical.target
+RUN echo '[Unit]' > /etc/systemd/system/boot-check.service
+RUN echo 'Description=OSTree 3-Minute Boot Check' >> /etc/systemd/system/boot-check.service
+RUN echo 'After=graphical.target' >> /etc/systemd/system/boot-check.service
 
-[Service]
-Type=simple
-ExecStart=/usr/local/bin/boot-check.sh
-RemainAfterExit=yes
+RUN echo '[Service]' >> /etc/systemd/system/boot-check.service
+RUN echo 'Type=simple' >> /etc/systemd/system/boot-check.service
+RUN echo 'ExecStart=/usr/local/bin/boot-check.sh' >> /etc/systemd/system/boot-check.service
+RUN echo 'RemainAfterExit=yes' >> /etc/systemd/system/boot-check.service
 
-[Install]
-WantedBy=default.target
-EOF
+RUN echo '[Install]' >> /etc/systemd/system/boot-check.service
+RUN echo 'WantedBy=default.target' >> /etc/systemd/system/boot-check.service
 
 # Enable the service
-systemctl enable boot-check.service
+RUN systemctl enable boot-check.service
+
 
 
 RUN bootc container lint
