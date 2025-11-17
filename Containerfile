@@ -59,7 +59,7 @@ RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetc
 
 # install bootupd from the AUR
 RUN pacman -S --noconfirm paru
-RUN paru -S --noconfirm bootupd-git
+RUN paru -Sy --noconfirm bootupd-git
 
 
 
