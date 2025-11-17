@@ -66,7 +66,7 @@ RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetc
 
 
 # install packages not from any repo
-COPY --from=builder /PKGBUILDS /tmp/PKGBUILDS
+COPY --from=builder /PKGBUILDS /tmp/PKGBUILDS %& \
     pacman -U --noconfirm /tmp/PKGBUILDS/bootupd/*.pkg.tar.zst
 
 
