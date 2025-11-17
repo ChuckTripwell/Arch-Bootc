@@ -1,3 +1,11 @@
+FROM docker.io/cachyos/cachyos-v3:latest AS builder
+UN pacman -Sy --noconfirm base-devel
+RUN useradd -m builder && \
+    echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+USER builder
+COPY --chown=builder:builder PKGBUILDS /PKGBUILDS
+RUN cd /PKGBUILDS/bootupd && makepkg -cs --noconfirm
+
 FROM docker.io/cachyos/cachyos-v3:latest
 
 ENV DEV_DEPS="base-devel git rust"
@@ -38,7 +46,7 @@ RUN pacman-key --init
 
 RUN pacman-key --populate archlinux
 
-RUN echo -e "\n[immutablearch]\nSigLevel = Optional TrustAll\nServer = https://immutablearch.github.io/packages/aur-repo/" \ >> /etc/pacman.conf
+#RUN echo -e "\n[immutablearch]\nSigLevel = Optional TrustAll\nServer = https://immutablearch.github.io/packages/aur-repo/" \ >> /etc/pacman.conf
 
 # Refresh the package database to retrieve packages.
 RUN pacman -Syu --noconfirm
@@ -48,32 +56,21 @@ RUN pacman -Syu --noconfirm
 ########################################################################################################################################
 
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
-RUN pacman -S --noconfirm base dracut cachyos-deckify linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow grub
-
-
-
-RUN pacman -S --noconfirm \
-    shim-fedora \
-    grub-efi \
-    bootupd-git \
-    skopeo \
-    git \
-    cosign \
-    buildah \
-    ostree \
-    tar \
-    dracut \
-    arch-install-scripts \
-    zstd \
-    rust \
-    pacman-ostree
-
-
+RUN pacman -S --noconfirm base dracut cachyos-deckify linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow grub shim
 
 
 # install usecase-specific packages.
 RUN pacman -S --noconfirm cachyos-handheld linux-cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools # chimeraos-device-quirks-git
 RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox alacritty waydroid topgrade just
+
+
+
+# install packages not from any repo
+COPY --from=builder /PKGBUILDS /tmp/PKGBUILDS
+    pacman -U --noconfirm /tmp/PKGBUILDS/bootupd/*.pkg.tar.zst
+
+
+
 
 
 
@@ -111,6 +108,21 @@ RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffa
 
 # User frontend programs/apps
 RUN pacman -S --noconfirm scx-scheds scx-manager gnome-disk-utility
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Add Maple Mono font, it's so cute! It's a pain to download! You'll love it.
 #RUN mkdir -p "/usr/share/fonts/Maple Mono" \
