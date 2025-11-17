@@ -1,11 +1,3 @@
-FROM docker.io/cachyos/cachyos-v3:latest AS builder
-RUN pacman -Sy --noconfirm base-devel
-RUN useradd -m builder && \
-    echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-USER builder
-COPY --chown=builder:builder PKGBUILDS /PKGBUILDS
-RUN cd /PKGBUILDS/bootupd && makepkg -cs --noconfirm
-
 FROM docker.io/cachyos/cachyos-v3:latest
 
 ENV DEV_DEPS="base-devel git rust"
@@ -65,11 +57,9 @@ RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetc
 
 
 
-# install packages not from any repo
-COPY --from=builder /PKGBUILDS /tmp/PKGBUILDS %& \
-    pacman -U --noconfirm /tmp/PKGBUILDS/bootupd/*.pkg.tar.zst
-
-
+# install bootupd from the AUR
+RUN pacman -S --noconfirm paru
+RUN paru -S --noconfirm bootupd-git
 
 
 
