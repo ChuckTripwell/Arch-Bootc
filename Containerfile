@@ -394,4 +394,37 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
 
 
+# Create the boot-check script
+cat << 'EOF' > /usr/local/bin/boot-check.sh
+#!/bin/bash
+sleep 180
+status=$(systemctl is-system-running)
+failed_units=$(systemctl --failed --no-legend | wc -l)
+if [[ "$status" == "running" && "$failed_units" -eq 0 ]]; then
+    sudo ostree admin mark-success
+else
+    echo "OSTree deployment failed."
+fi
+EOF
+chmod +x /usr/local/bin/boot-check.sh
+
+# Create the systemd service
+cat << 'EOF' > /etc/systemd/system/boot-check.service
+[Unit]
+Description=OSTree 3-Minute Boot Check
+After=graphical.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/boot-check.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
+EOF
+
+# Enable the service
+systemctl enable boot-check.service
+
+
 RUN bootc container lint
