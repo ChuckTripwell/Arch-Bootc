@@ -95,9 +95,7 @@ RUN pacman -S --noconfirm scx-scheds scx-manager gnome-disk-utility
 
 
 
-
-
-
+cargo install greenboot
 
 
 
