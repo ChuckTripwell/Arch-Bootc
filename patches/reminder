@@ -29,3 +29,16 @@ EOF
 
 # Enable the service
 systemctl enable boot-check.service
+
+
+
+
+# force sddm to use Wayland
+RUN mkdir -p /usr/lib/sddm/sddm.conf.d && \
+    echo -e "[General]\nDisplayServer=wayland\nGreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell\n\n[Wayland]\nCompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf && \
+    systemctl enable sddm
+
+
+
+
+
