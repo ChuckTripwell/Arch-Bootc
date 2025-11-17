@@ -394,6 +394,9 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
 
 # Create the boot-check script
+RUN mkdir -p /usr/local/bin
+RUN touch /usr/local/bin/boot-check.sh
+
 RUN echo '#!/bin/bash' > /usr/local/bin/boot-check.sh
 RUN echo 'sleep 180' >> /usr/local/bin/boot-check.sh
 RUN echo 'status=$(systemctl is-system-running)' >> /usr/local/bin/boot-check.sh
@@ -406,17 +409,20 @@ RUN echo 'fi' >> /usr/local/bin/boot-check.sh
 RUN chmod +x /usr/local/bin/boot-check.sh
 
 # Create the systemd service
-RUN echo '[Unit]' > /etc/systemd/system/boot-check.service
-RUN echo 'Description=OSTree 3-Minute Boot Check' >> /etc/systemd/system/boot-check.service
-RUN echo 'After=graphical.target' >> /etc/systemd/system/boot-check.service
+RUN mkdir -p /etc/systemd/system/
+RUN touch /usr/etc/systemd/system/boot-check.service
 
-RUN echo '[Service]' >> /etc/systemd/system/boot-check.service
-RUN echo 'Type=simple' >> /etc/systemd/system/boot-check.service
-RUN echo 'ExecStart=/usr/local/bin/boot-check.sh' >> /etc/systemd/system/boot-check.service
-RUN echo 'RemainAfterExit=yes' >> /etc/systemd/system/boot-check.service
-
-RUN echo '[Install]' >> /etc/systemd/system/boot-check.service
-RUN echo 'WantedBy=default.target' >> /etc/systemd/system/boot-check.service
+RUN echo '[Unit]' > /usr/etc/systemd/system/boot-check.service
+RUN echo 'Description=OSTree 3-Minute Boot Check' >> /usr/etc/systemd/system/boot-check.service
+RUN echo 'After=graphical.target' >> /usr/etc/systemd/system/boot-check.service
+RUN echo ""  /usr/etc/systemd/system/boot-check.service
+RUN echo '[Service]' >> /usr/etc/systemd/system/boot-check.service
+RUN echo 'Type=simple' >> /usr/etc/systemd/system/boot-check.service
+RUN echo 'ExecStart=/usr/local/bin/boot-check.sh' >> /usr/etc/systemd/system/boot-check.service
+RUN echo 'RemainAfterExit=yes' >> /usr/etc/systemd/system/boot-check.service
+RUN echo ""  /usr/etc/systemd/system/boot-check.service
+RUN echo '[Install]' >> /usr/etc/systemd/system/boot-check.service
+RUN echo 'WantedBy=default.target' >> /usr/etc/systemd/system/boot-check.service
 
 # Enable the service
 RUN systemctl enable boot-check.service
