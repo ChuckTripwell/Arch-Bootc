@@ -56,20 +56,6 @@ RUN pacman -S --noconfirm cachyos-handheld linux-cachyos-deckify steam-powerbutt
 RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox alacritty waydroid topgrade just
 
 
-
-RUN useradd -m -s /bin/bash aur && \
-    echo "aur ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/aur && \
-    mkdir -p /tmp_aur_build && chown -R aur /tmp_aur_build && \
-    install-packages-build git base-devel; \
-    runuser -u aur -- env -C /tmp_aur_build git clone 'https://aur.archlinux.org/paru-bin.git' && \
-    runuser -u aur -- env -C /tmp_aur_build/paru-bin makepkg -si --noconfirm && \
-    rm -rf /tmp_aur_build && \
-    runuser -u aur -- paru -S --noconfirm bootupd-git ; \
-    userdel -rf aur; rm -rf /home/aur /etc/sudoers.d/aur
-
-
-
-
 # Media/Install utilities/Media drivers
 RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid ddcutil dmidecode mesa-utils ntfs-3g \
       vulkan-tools wayland-utils playerctl
@@ -409,20 +395,20 @@ RUN echo 'fi' >> /usr/local/bin/boot-check.sh
 RUN chmod +x /usr/local/bin/boot-check.sh
 
 # Create the systemd service
-RUN mkdir -p /etc/systemd/system/
-RUN touch /usr/etc/systemd/system/boot-check.service
+RUN mkdir -p usr/lib/systemd/system
+RUN touch /usr/lib/systemd/system/boot-check.service
 
-RUN echo '[Unit]' > /usr/etc/systemd/system/boot-check.service
-RUN echo 'Description=OSTree 3-Minute Boot Check' >> /usr/etc/systemd/system/boot-check.service
-RUN echo 'After=graphical.target' >> /usr/etc/systemd/system/boot-check.service
-RUN echo ""  /usr/etc/systemd/system/boot-check.service
-RUN echo '[Service]' >> /usr/etc/systemd/system/boot-check.service
-RUN echo 'Type=simple' >> /usr/etc/systemd/system/boot-check.service
-RUN echo 'ExecStart=/usr/local/bin/boot-check.sh' >> /usr/etc/systemd/system/boot-check.service
-RUN echo 'RemainAfterExit=yes' >> /usr/etc/systemd/system/boot-check.service
-RUN echo ""  /usr/etc/systemd/system/boot-check.service
-RUN echo '[Install]' >> /usr/etc/systemd/system/boot-check.service
-RUN echo 'WantedBy=default.target' >> /usr/etc/systemd/system/boot-check.service
+RUN echo '[Unit]' > /usr/lib/systemd/system/boot-check.service
+RUN echo 'Description=OSTree 3-Minute Boot Check' >> /usr/lib/systemd/system/boot-check.service
+RUN echo 'After=graphical.target' >> /usr/lib/systemd/system/boot-check.service
+RUN echo ""  /usr/lib/systemd/system/boot-check.service
+RUN echo '[Service]' >> /usr/lib/systemd/system/boot-check.service
+RUN echo 'Type=simple' >> /usr/lib/systemd/system/boot-check.service
+RUN echo 'ExecStart=/usr/local/bin/boot-check.sh' >> /usr/lib/systemd/system/boot-check.service
+RUN echo 'RemainAfterExit=yes' >> /usr/lib/systemd/system/boot-check.service
+RUN echo ""  /usr/lib/systemd/system/boot-check.service
+RUN echo '[Install]' >> /usr/lib/systemd/system/boot-check.service
+RUN echo 'WantedBy=default.target' >> /usr/lib/systemd/system/boot-check.service
 
 # Enable the service
 RUN systemctl enable boot-check.service
