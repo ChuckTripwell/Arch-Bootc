@@ -1,5 +1,5 @@
 FROM docker.io/cachyos/cachyos-v3:latest AS builder
-UN pacman -Sy --noconfirm base-devel
+RUN pacman -Sy --noconfirm base-devel
 RUN useradd -m builder && \
     echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 USER builder
