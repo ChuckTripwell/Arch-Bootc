@@ -372,17 +372,17 @@ RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
 #RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/package-installs.sh|bash
 
 # forces sddm to use Wayland.
-# create file
-RUN mkdir -p /usr/lib/sddm/sddm.conf.d
-RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-# populate file
-RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-RUN echo "GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-# enable sddm
+#### create file
+#RUN mkdir -p /usr/lib/sddm/sddm.conf.d
+#RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#### populate file
+#RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#### enable sddm
 RUN systemctl enable sddm
 
 # RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/sddm-fix.sh|bash
