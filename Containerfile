@@ -337,13 +337,27 @@ net.ipv4.tcp_congestion_control=bbr\n' > /etc/sysctl.d/99-bbr3.conf
 #RUN pacman -Sy --noconfirm --needed curl
 
 # fix user permissions.
-RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/permissions-fix.sh|bash
+RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
+#RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/permissions-fix.sh|bash
 
 # install usecase-specific packages.
 #RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/package-installs.sh|bash
 
 # forces sddm to use Wayland.
-RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/sddm-fix.sh|bash
+# create file
+RUN mkdir -p /usr/lib/sddm/sddm.conf.d
+RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+# populate file
+RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+# enable sddm
+RUN systemctl enable sddm
+
+# RUN curl -sL https://raw.githubusercontent.com/ChuckTripwell/Arch-Bootc/refs/heads/main/patches/sddm-fix.sh|bash
 
 ########################################################################################################################################
 # Section 8 - Final Bootc Setup. The horrors are endless. but we stay silly ############################################################
