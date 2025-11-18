@@ -399,19 +399,19 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
 
 # Create the boot-check script
-RUN mkdir -p /usr/local/bin
-RUN touch /usr/local/bin/boot-check.sh
-
-RUN echo '#!/bin/bash' > /usr/local/bin/boot-check.sh
-RUN echo 'sleep 180' >> /usr/local/bin/boot-check.sh
-RUN echo 'status=$(systemctl is-system-running)' >> /usr/local/bin/boot-check.sh
-RUN echo 'failed_units=$(systemctl --failed --no-legend | wc -l)' >> /usr/local/bin/boot-check.sh
-RUN echo 'if [[ "$status" == "running" && "$failed_units" -eq 0 ]]; then' >> /usr/local/bin/boot-check.sh
-RUN echo '    sudo ostree admin mark-success' >> /usr/local/bin/boot-check.sh
-RUN echo 'else' >> /usr/local/bin/boot-check.sh
-RUN echo '    echo "OSTree deployment failed."' >> /usr/local/bin/boot-check.sh
-RUN echo 'fi' >> /usr/local/bin/boot-check.sh
-RUN chmod +x /usr/local/bin/boot-check.sh
+#RUN mkdir -p /usr/local/bin
+#RUN touch /usr/local/bin/boot-check.sh
+#
+#RUN echo '#!/bin/bash' > /usr/local/bin/boot-check.sh
+#RUN echo 'sleep 180' >> /usr/local/bin/boot-check.sh
+#RUN echo 'status=$(systemctl is-system-running)' >> /usr/local/bin/boot-check.sh
+#RUN echo 'failed_units=$(systemctl --failed --no-legend | wc -l)' >> /usr/local/bin/boot-check.sh
+#RUN echo 'if [[ "$status" == "running" && "$failed_units" -eq 0 ]]; then' >> /usr/local/bin/boot-check.sh
+#RUN echo '    sudo ostree admin mark-success' >> /usr/local/bin/boot-check.sh
+#RUN echo 'else' >> /usr/local/bin/boot-check.sh
+#RUN echo '    echo "OSTree deployment failed."' >> /usr/local/bin/boot-check.sh
+#RUN echo 'fi' >> /usr/local/bin/boot-check.sh
+#RUN chmod +x /usr/local/bin/boot-check.sh
 
 # Create the systemd service
 #RUN mkdir -p usr/lib/systemd/system
@@ -432,7 +432,7 @@ RUN chmod +x /usr/local/bin/boot-check.sh
 # Enable the service
 RUN systemctl enable bazzite-grub-boot-success.timer
 RUN systemctl enable bazzite-grub-boot-success.service
-#RUN systemctl enable bazzite-autologin.service
+RUN systemctl enable bazzite-autologin.service
 RUN systemctl enable bazzite-tdpfix.service
 RUN systemctl enable bazzite-flatpak-manager.service
 RUN systemctl enable bazzite-hardware-setup.service
