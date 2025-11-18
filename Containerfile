@@ -92,7 +92,7 @@ RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffa
 RUN pacman -S --noconfirm scx-scheds scx-manager gnome-disk-utility
 
 
-
+####
 
 RUN pacman --noconfirm -S rsync
 RUN cd /tmp && git clone https://github.com/ublue-os/bazzite/ && \
@@ -101,9 +101,9 @@ RUN cd /tmp && git clone https://github.com/ublue-os/bazzite/ && \
     rm -r ./bazzite 
 
 ####
-# delete these later:
-RUN systemctl enable bazzite-grub-boot-success.timer
-RUN systemctl enable bazzite-grub-boot-success.service
+
+RUN ln -s /usr/bin/grub-editenv /usr/bin/grub2-editenv
+
 ####
 
 
