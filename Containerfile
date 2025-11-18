@@ -119,6 +119,8 @@ RUN cd /tmp && git clone https://github.com/ublue-os/bazzite/ && \
 RUN ln -s /usr/bin/grub-editenv /usr/bin/grub2-editenv
 
 # create a /boot/grub to use bazzite scripts
+RUN mkdir -p /usr/lib/systemd/system
+RUN touch /usr/lib/systemd/system/fix-grub-link.service
 RUN echo "[Unit]" > /usr/lib/systemd/system/fix-grub-link.service
 RUN echo "Description=Create /boot/grub symlink if missing" >> /usr/lib/systemd/system/fix-grub-link.service
 RUN echo "ConditionPathExists=!/boot/grub" >> /usr/lib/systemd/system/fix-grub-link.service
@@ -130,6 +132,7 @@ RUN echo "" >> /usr/lib/systemd/system/fix-grub-link.service
 RUN echo "[Install]" >> /usr/lib/systemd/system/fix-grub-link.service
 RUN echo "WantedBy=multi-user.target" >> /usr/lib/systemd/system/fix-grub-link.service
 
+RUN systemctl enable /usr/lib/systemd/system/fix-grub-link.service
 
 ####
 
