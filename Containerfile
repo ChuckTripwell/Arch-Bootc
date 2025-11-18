@@ -18,6 +18,18 @@ ENV DRACUT_NO_XATTR=1
 # Section 0 - Pre-setup | We do some system maintenance tasks + Set up some things for the rest of the containerfile to go smooothly! ##
 ########################################################################################################################################
 
+
+
+
+# test #1
+RUN ln -s /boot/grub2 /boot/grub
+
+
+
+
+
+
+
 # Set it up such that pacman will automatically clean package cache after each install
 # So that we don't run out of memory in image generation and don't need to append --clean after everything
 # ALSO DO NOT APPEND --CLEAN TO ANYTHING :D
@@ -105,6 +117,7 @@ RUN cd /tmp && git clone https://github.com/ublue-os/bazzite/ && \
 ####
 
 RUN ln -s /usr/bin/grub-editenv /usr/bin/grub2-editenv
+#RUN ln -s /boot/grub2 /boot/grub
 
 ####
 
