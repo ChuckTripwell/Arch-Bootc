@@ -65,7 +65,7 @@ RUN pacman -S --noconfirm base dracut cachyos-deckify linux-firmware ostree syst
 # install usecase-specific packages.
 RUN pacman -S --noconfirm cachyos-handheld linux-cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools # chimeraos-device-quirks-git
 RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox ptyxis waydroid topgrade
-RUN pacman -S --noconfirm docker-compose kpnsole just
+RUN pacman -S --noconfirm docker-compose konsole just
 
 # Media/Install utilities/Media drivers
 RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid ddcutil dmidecode mesa-utils ntfs-3g \
