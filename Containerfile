@@ -432,7 +432,7 @@ RUN chmod +x /usr/local/bin/boot-check.sh
 # Enable the service
 RUN systemctl enable bazzite-grub-boot-success.timer
 RUN systemctl enable bazzite-grub-boot-success.service
-RUN systemctl enable bazzite-autologin.service
+#RUN systemctl enable bazzite-autologin.service
 RUN systemctl enable bazzite-tdpfix.service
 RUN systemctl enable bazzite-flatpak-manager.service
 RUN systemctl enable bazzite-hardware-setup.service
