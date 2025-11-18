@@ -95,7 +95,10 @@ RUN pacman -S --noconfirm scx-scheds scx-manager gnome-disk-utility
 
 
 RUN pacman --noconfirm -S rsync
-RUN cd /tmp && git clone https://github.com/ublue-os/bazzite/ && rsync -r ./bazzite/system_files/deck/shared/ / && rm -r ./bazzite 
+RUN cd /tmp && git clone https://github.com/ublue-os/bazzite/ && \
+    rsync -r ./bazzite/system_files/deck/shared/ / && \
+    rsync -r ./bazzite/system_files/desktop/shared/ / && \
+    rm -r ./bazzite 
 
 ####
 # delete these later:
