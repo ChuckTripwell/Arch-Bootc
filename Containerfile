@@ -414,24 +414,28 @@ RUN echo 'fi' >> /usr/local/bin/boot-check.sh
 RUN chmod +x /usr/local/bin/boot-check.sh
 
 # Create the systemd service
-RUN mkdir -p usr/lib/systemd/system
-RUN touch /usr/lib/systemd/system/boot-check.service
+#RUN mkdir -p usr/lib/systemd/system
+#RUN touch /usr/lib/systemd/system/boot-check.service
 
-RUN echo '[Unit]' > /usr/lib/systemd/system/boot-check.service
-RUN echo 'Description=OSTree 3-Minute Boot Check' >> /usr/lib/systemd/system/boot-check.service
-RUN echo 'After=graphical.target' >> /usr/lib/systemd/system/boot-check.service
-RUN echo ""  /usr/lib/systemd/system/boot-check.service
-RUN echo '[Service]' >> /usr/lib/systemd/system/boot-check.service
-RUN echo 'Type=simple' >> /usr/lib/systemd/system/boot-check.service
-RUN echo 'ExecStart=/usr/local/bin/boot-check.sh' >> /usr/lib/systemd/system/boot-check.service
-RUN echo 'RemainAfterExit=yes' >> /usr/lib/systemd/system/boot-check.service
-RUN echo ""  /usr/lib/systemd/system/boot-check.service
-RUN echo '[Install]' >> /usr/lib/systemd/system/boot-check.service
-RUN echo 'WantedBy=default.target' >> /usr/lib/systemd/system/boot-check.service
+#RUN echo '[Unit]' > /usr/lib/systemd/system/boot-check.service
+#RUN echo 'Description=OSTree 3-Minute Boot Check' >> /usr/lib/systemd/system/boot-check.service
+#RUN echo 'After=graphical.target' >> /usr/lib/systemd/system/boot-check.service
+#RUN echo ""  /usr/lib/systemd/system/boot-check.service
+#RUN echo '[Service]' >> /usr/lib/systemd/system/boot-check.service
+#RUN echo 'Type=simple' >> /usr/lib/systemd/system/boot-check.service
+#RUN echo 'ExecStart=/usr/local/bin/boot-check.sh' >> /usr/lib/systemd/system/boot-check.service
+#RUN echo 'RemainAfterExit=yes' >> /usr/lib/systemd/system/boot-check.service
+#RUN echo ""  /usr/lib/systemd/system/boot-check.service
+#RUN echo '[Install]' >> /usr/lib/systemd/system/boot-check.service
+#RUN echo 'WantedBy=default.target' >> /usr/lib/systemd/system/boot-check.service
 
 # Enable the service
 RUN systemctl enable bazzite-grub-boot-success.timer
 RUN systemctl enable bazzite-grub-boot-success.service
+RUN systemctl enable bazzite-autologin.service
+RUN systemctl enable bazzite-tdpfix.service
+RUN systemctl enable bazzite-flatpak-manager.service
+RUN systemctl enable bazzite-hardware-setup.service
 
 
 
