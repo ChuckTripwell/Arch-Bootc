@@ -21,8 +21,7 @@ ENV DRACUT_NO_XATTR=1
 
 
 
-# test #1
-RUN ln -s /boot/grub2 /boot/grub
+
 
 
 
@@ -65,8 +64,8 @@ RUN pacman -S --noconfirm base dracut cachyos-deckify linux-firmware ostree syst
 
 # install usecase-specific packages.
 RUN pacman -S --noconfirm cachyos-handheld linux-cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools # chimeraos-device-quirks-git
-RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox alacritty waydroid topgrade just
-RUN pacman -S --noconfirm docker-compose
+RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox ptyxis waydroid topgrade
+RUN pacman -S --noconfirm docker-compose kpnsole just
 
 # Media/Install utilities/Media drivers
 RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid ddcutil dmidecode mesa-utils ntfs-3g \
@@ -106,6 +105,8 @@ RUN pacman -S --noconfirm scx-scheds scx-manager gnome-disk-utility
 
 ####
 
+# bazzite stuff (I'm lazy)
+#
 RUN pacman --noconfirm -S rsync
 RUN cd /tmp && git clone https://github.com/ublue-os/bazzite/ && \
     rsync -r ./bazzite/system_files/desktop/shared/ / && \
@@ -114,10 +115,21 @@ RUN cd /tmp && git clone https://github.com/ublue-os/bazzite/ && \
     rsync -r ./bazzite/system_files/deck/kinoite/ / && \
     rm -r ./bazzite
 
-####
-
+# bazzite scripts need grub2-editenv
 RUN ln -s /usr/bin/grub-editenv /usr/bin/grub2-editenv
-#RUN ln -s /boot/grub2 /boot/grub
+
+# create a /boot/grub to use bazzite scripts
+RUN echo "[Unit]" > /usr/lib/systemd/system/fix-grub-link.service
+RUN echo "Description=Create /boot/grub symlink if missing" >> /usr/lib/systemd/system/fix-grub-link.service
+RUN echo "ConditionPathExists=!/boot/grub" >> /usr/lib/systemd/system/fix-grub-link.service
+RUN echo "" >> /usr/lib/systemd/system/fix-grub-link.service
+RUN echo "[Service]" >> /usr/lib/systemd/system/fix-grub-link.service
+RUN echo "Type=oneshot" >> /usr/lib/systemd/system/fix-grub-link.service
+RUN echo "ExecStart=/bin/ln -s /boot/grub2 /boot/grub" >> /usr/lib/systemd/system/fix-grub-link.service
+RUN echo "" >> /usr/lib/systemd/system/fix-grub-link.service
+RUN echo "[Install]" >> /usr/lib/systemd/system/fix-grub-link.service
+RUN echo "WantedBy=multi-user.target" >> /usr/lib/systemd/system/fix-grub-link.service
+
 
 ####
 
