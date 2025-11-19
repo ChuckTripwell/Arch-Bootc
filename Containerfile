@@ -1,5 +1,15 @@
+FROM docker.io/cachyos/cachyos-v3:latest AS builder
 
-FROM docker.io/cachyos/cachyos-v3:latest
+RUN pacman -Sy --noconfirm base-devel git
+RUN useradd -m builder && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+USER builder
+WORKDIR /home/builder
+ARG AUR_PKG=bootc-git-composefs
+RUN git clone https://aur.archlinux.org/${AUR_PKG}.git
+WORKDIR /home/builder/${AUR_PKG}
+RUN makepkg --noconfirm --syncdeps --nobuild && makepkg --noconfirm --cleanbuild
+
+FROM docker.io/cachyos/cachyos-v3:latest AS runtime
 
 ENV DEV_DEPS="base-devel git rust"
 
@@ -126,40 +136,16 @@ RUN curl -L \
 # FIXME: remove
 #RUN printf "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee /etc/dracut.conf.d/fix-bootc.conf
 
+
+COPY --from=builder /home/builder/${AUR_PKG}/* /tmp/
+RUN pacman -Sy --noconfirm && pacman -U --noconfirm /tmp/*.pkg.tar.zst && pacman -Scc --noconfirm
+
 #RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
 #    pacman -S --noconfirm base-devel git rust && \
 #    git clone https://github.com/bootc-dev/bootc.git /tmp/bootc && \
 #    make -C /tmp/bootc bin install-all install-initramfs-dracut && \
 #    sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
 #    dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERSION/initramfs.img"'
-
-
-
-RUN pacman --noconfirm -Sy paru
-RUN mkdir -p /tmp/PKG
-RUN paru --noconfirm -Sw bootc-git-composefs --cachedir /tmp/PKG/
-RUN pacman --noconfirm -U /tmp/PKG/*.pkg.tar.zst
-
-
-
-
-
-
-
-
-#RUN pacman -Sy --noconfirm base-devel git sudo
-#RUN useradd -m builder && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-#USER builder  
-#WORKDIR /home/builder
-#RUN pacman -S --noconfirm paru
-#RUN paru -S --noconfirm bootc-git-composefs
-#USER root
-#RUN userdel -r builder && rm -rf /home/builder && pacman -Scc --noconfirm
-
-
-#RUN sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
-#    dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERS
-
 
 ########################################################################################################################################
 # Section 3 - Chaotic AUR # We grab some precompiled packages from the Chaotic AUR for things not on Arch repos/better updated~ ovo ####
