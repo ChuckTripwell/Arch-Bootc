@@ -133,17 +133,15 @@ RUN curl -L \
 #    sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
 #    dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERSION/initramfs.img"'
 
-RUN pacman -Sy --noconfirm base-devel git sudo  
-RUN useradd -m builder  
-RUN echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers  
+RUN pacman -Sy --noconfirm base-devel git sudo
+RUN useradd -m builder && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER builder  
-WORKDIR /tmp/bootc-build  
-RUN git clone https://aur.archlinux.org/bootc-git.git .  
-RUN BUILDDIR=/tmp makepkg -si --noconfirm --noconfirm  
-USER root  
-RUN userdel -r builder  
-RUN find / -xdev -user builder -exec rm -rf {} +  
-RUN rm -rf /tmp/bootc-build  
+WORKDIR /home/builder
+RUN pacman -S --noconfirm paru
+RUN paru -S --noconfirm bootc-git-composefs
+USER root
+RUN userdel -r builder && rm -rf /home/builder && pacman -Scc --noconfirm
+
 
 RUN sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
     dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERS
