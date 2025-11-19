@@ -383,6 +383,15 @@ RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
 
 
 ###########_____________________________________________________________________________________________________________________________
+# install usecase-specific packages.
+#
+RUN pacman -S --noconfirm cachyos-handheld linux-cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools
+RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox ptyxis waydroid topgrade
+RUN pacman -S --noconfirm docker-compose konsole just
+#_______________________________________________________________________________________________________________________________________
+
+
+###########_____________________________________________________________________________________________________________________________
 # bazzite stuff (I'm lazy)
 #
 RUN pacman --noconfirm -S rsync
@@ -423,23 +432,13 @@ RUN systemctl enable /usr/lib/systemd/system/fix-grub-link.service
 
 
 ###########_____________________________________________________________________________________________________________________________
-# install usecase-specific packages.
-RUN pacman -S --noconfirm cachyos-handheld linux-cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools
-RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox ptyxis waydroid topgrade
-RUN pacman -S --noconfirm docker-compose konsole just
-#_______________________________________________________________________________________________________________________________________
-
-
-
-
-###########_____________________________________________________________________________________________________________________________
 # forces sddm to use Wayland.
-
-#### create file___
+#
+#### create file
 RUN mkdir -p /usr/lib/sddm/sddm.conf.d
 RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 
-#### populate file___
+#### populate file
 RUN echo -e "[General]
 DisplayServer=wayland
 GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell
@@ -451,6 +450,7 @@ CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --loc
 
 ###########_____________________________________________________________________________________________________________________________
 # enable services.
+#
 RUN systemctl enable sddm
 RUN systemctl enable docker podman
 
@@ -464,6 +464,7 @@ RUN systemctl enable bazzite-hardware-setup.service
 
 ###########_____________________________________________________________________________________________________________________________
 # fix user permissions.
+#
 RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /usr/etc/sudoers
 #_______________________________________________________________________________________________________________________________________
 
