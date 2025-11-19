@@ -133,18 +133,32 @@ RUN curl -L \
 #    sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
 #    dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERSION/initramfs.img"'
 
-RUN pacman -Sy --noconfirm base-devel git sudo
-RUN useradd -m builder && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-USER builder  
-WORKDIR /home/builder
-RUN pacman -S --noconfirm paru
-RUN paru -S --noconfirm bootc-git-composefs
-USER root
-RUN userdel -r builder && rm -rf /home/builder && pacman -Scc --noconfirm
 
 
-RUN sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
-    dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERS
+RUN pacman --noconfirm -Sy paru
+RUN mkdir -p /tmp/PKG
+RUN paru --noconfirm -Sw bootc-git-composefs --cachedir /tmp/PKG/
+RUN pacman --noconfirm -U /tmp/PKG/*.pkg.tar.zst
+
+
+
+
+
+
+
+
+#RUN pacman -Sy --noconfirm base-devel git sudo
+#RUN useradd -m builder && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#USER builder  
+#WORKDIR /home/builder
+#RUN pacman -S --noconfirm paru
+#RUN paru -S --noconfirm bootc-git-composefs
+#USER root
+#RUN userdel -r builder && rm -rf /home/builder && pacman -Scc --noconfirm
+
+
+#RUN sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
+#    dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERS
 
 
 ########################################################################################################################################
