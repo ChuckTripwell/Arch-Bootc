@@ -435,15 +435,15 @@ RUN systemctl enable /usr/lib/systemd/system/fix-grub-link.service
 # forces sddm to use Wayland.
 #
 #### create file
-#RUN mkdir -p /usr/lib/sddm/sddm.conf.d
-#RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN mkdir -p /usr/lib/sddm/sddm.conf.d
+RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 #### populate file
-#RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-#RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-#RUN echo "GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-#RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-#RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-#RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 #_______________________________________________________________________________________________________________________________________
 
 
