@@ -1,15 +1,4 @@
-FROM docker.io/cachyos/cachyos-v3:latest AS builder
-
-RUN pacman -Sy --noconfirm base-devel git
-RUN useradd -m builder && echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-USER builder
-WORKDIR /home/builder
-ARG AUR_PKG=bootc-git-composefs
-RUN git clone https://aur.archlinux.org/${AUR_PKG}.git
-WORKDIR /home/builder/${AUR_PKG}
-RUN makepkg --noconfirm --syncdeps --nobuild && makepkg --noconfirm --cleanbuild
-
-FROM docker.io/cachyos/cachyos-v3:latest AS runtime
+FROM docker.io/cachyos/cachyos-v3:latest
 
 ENV DEV_DEPS="base-devel git rust"
 
@@ -158,19 +147,16 @@ RUN pacman -Sy --noconfirm
 
 # Workaround due to dracut version bump, please remove eventually
 # FIXME: remove
-#RUN printf "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee /etc/dracut.conf.d/fix-bootc.conf
+RUN printf "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee /etc/dracut.conf.d/fix-bootc.conf
 
 
-COPY --from=builder /home/builder/${AUR_PKG}/* /tmp/
-RUN pacman -S --noconfirm rust
-RUN pacman -S --noconfirm && pacman -U --noconfirm /tmp/*.pkg.tar.zst && pacman -Scc --noconfirm
 
-#RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
-#    pacman -S --noconfirm base-devel git rust && \
-#    git clone https://github.com/bootc-dev/bootc.git /tmp/bootc && \
-#    make -C /tmp/bootc bin install-all install-initramfs-dracut && \
-#    sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
-#    dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERSION/initramfs.img"'
+RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
+    pacman -S --noconfirm base-devel git rust && \
+    git clone https://github.com/bootc-dev/bootc.git /tmp/bootc && \
+    make -C /tmp/bootc bin install-all install-initramfs-dracut && \
+    sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
+    dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERSION/initramfs.img"'
 
 ########################################################################################################################################
 # Section 4 Flatpaks preinstalls | We love containers, flatpaks, and protecting installs from breaking! ################################
@@ -404,6 +390,21 @@ RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
 RUN pacman -S --noconfirm cachyos-handheld steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools
 RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox ptyxis waydroid topgrade
 RUN pacman -S --noconfirm docker-compose konsole just weston fish
+#_______________________________________________________________________________________________________________________________________
+
+
+###########_____________________________________________________________________________________________________________________________
+# install aur packages
+#
+RUN useradd -m -s /bin/bash aur && \
+    echo "aur ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/aur && \
+    mkdir -p /tmp_aur_build && chown -R aur /tmp_aur_build && \
+    install-packages-build git base-devel; \
+    runuser -u aur -- env -C /tmp_aur_build git clone 'https://aur.archlinux.org/paru-bin.git' && \
+    runuser -u aur -- env -C /tmp_aur_build/paru-bin makepkg -si --noconfirm && \
+    rm -rf /tmp_aur_build && \
+    runuser -u aur -- paru -S --noconfirm pacman-ostree ; \
+    userdel -rf aur; rm -rf /home/aur /etc/sudoers.d/aur
 #_______________________________________________________________________________________________________________________________________
 
 
