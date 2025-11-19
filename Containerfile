@@ -264,8 +264,8 @@ RUN systemctl enable flatpak-preinstall.service
 ########################################################################################################################################
 
 # Add user to sudoers file for sudo, enable polkit
-RUN echo "%wheel      ALL=(ALL:ALL) ALL" | tee -a /etc/sudoers
-RUN systemctl enable polkit
+#RUN echo "%wheel      ALL=(ALL:ALL) ALL" | tee -a /etc/sudoers
+#RUN systemctl enable polkit
 
 # Set up zram, this will help users not run out of memory. Fox will fix!
 RUN echo -ne '[zram0]\nzram-size = min(ram, 8192)' >> /usr/lib/systemd/zram-generator.conf
@@ -381,6 +381,7 @@ net.ipv4.tcp_congestion_control=bbr\n' > /etc/sysctl.d/99-bbr3.conf
 ###########_____________________________________________________________________________________________________________________________
 # fix user permissions.
 RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
+RUN systemctl enable polkit
 #_______________________________________________________________________________________________________________________________________
 
 
