@@ -47,7 +47,7 @@ RUN pacman -Syu --noconfirm
 RUN pacman -S --noconfirm reflector
 
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
-RUN pacman -S --noconfirm base dracut cachyos-deckify linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow
+RUN pacman -S --noconfirm base dracut linux-cachyos-deckify linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow
 
 # Media/Install utilities/Media drivers
 RUN pacman -S --noconfirm librsvg libglvnd qt6-multimedia-ffmpeg plymouth acpid ddcutil dmidecode mesa-utils ntfs-3g \
@@ -69,7 +69,7 @@ RUN pacman -S --noconfirm libmtp networkmanager-openconnect networkmanager-openv
       udisks2 
 
 # Accessibility
-RUN pacman -S --noconfirm espeak-ng orca
+#RUN pacman -S --noconfirm espeak-ng orca
 
 # Pipewire
 RUN pacman -S --noconfirm pipewire pipewire-pulse pipewire-zeroconf pipewire-ffado pipewire-libcamera sof-firmware wireplumber
@@ -387,7 +387,7 @@ RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
 #
 RUN pacman -S --noconfirm cachyos-handheld steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools
 RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox ptyxis waydroid topgrade
-RUN pacman -S --noconfirm docker-compose konsole just weston
+RUN pacman -S --noconfirm docker-compose konsole just weston fish
 #_______________________________________________________________________________________________________________________________________
 
 
