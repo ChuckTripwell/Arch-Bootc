@@ -63,7 +63,7 @@ RUN pacman -S --noconfirm base dracut cachyos-deckify linux-firmware ostree syst
 
 
 # install usecase-specific packages.
-RUN pacman -S --noconfirm cachyos-handheld linux-cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools # chimeraos-device-quirks-git
+RUN pacman -S --noconfirm cachyos-handheld linux-cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools
 RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox ptyxis waydroid topgrade
 RUN pacman -S --noconfirm docker-compose konsole just
 
@@ -164,7 +164,7 @@ RUN echo "QT_QPA_PLATFORMTHEME=qt6ct" > /etc/environment
 
 # Workaround due to dracut version bump, please remove eventually
 # FIXME: remove
-RUN printf "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee /etc/dracut.conf.d/fix-bootc.conf
+RUN print "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee /etc/dracut.conf.d/fix-bootc.conf
 
 RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
     pacman -S --noconfirm base-devel git rust && \
@@ -219,7 +219,7 @@ RUN printf "[Flatpak Preinstall io.github.kolunmi.Bazaar]\nBranch=stable\nIsRunt
 #RUN printf "[Flatpak Preinstall com.obsproject.Studio.Plugin.OBSVkCapture]\nBranch=stable\nIsRuntime=true" > /usr/share/flatpak/preinstall.d/OBSVKCapture.preinstall
 
 # Ark | For unzipping files and file compression! (Imagine a fox whose face you may squish...)
-RUN printf "[Flatpak Preinstall org.kde.ark]\nBranch=stable\nIsRuntime=false" > /usr/share/flatpak/preinstall.d/Ark.preinstall
+#RUN printf "[Flatpak Preinstall org.kde.ark]\nBranch=stable\nIsRuntime=false" > /usr/share/flatpak/preinstall.d/Ark.preinstall
 
 # Cave Story, a free, public domain platformer! It"s historically important to videogames and platformers as a genre.
 #RUN printf "[Flatpak Preinstall com.gitlab.coringao.cavestory-nx]\nBranch=stable\nIsRuntime=false" > /usr/share/flatpak/preinstall.d/CaveStory.preinstall
@@ -373,15 +373,15 @@ RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
 
 # forces sddm to use Wayland.
 #### create file
-#RUN mkdir -p /usr/lib/sddm/sddm.conf.d
-#RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN mkdir -p /usr/lib/sddm/sddm.conf.d
+RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 #### populate file
-#RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-#RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-#RUN echo "GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-#RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-#RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-#RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 #### enable sddm
 RUN systemctl enable sddm
 
@@ -426,36 +426,6 @@ RUN sed -i 's|^HOME=.*|HOME=/var/home|' "/etc/default/useradd" && \
     echo "d /run/media 0755 root root -" | tee -a /usr/lib/tmpfiles.d/bootc-base-dirs.conf && \
     printf "[composefs]\nenabled = yes\n[sysroot]\nreadonly = true\n" | tee "/usr/lib/ostree/prepare-root.conf"
 
-# Create the boot-check script
-#RUN mkdir -p /usr/local/bin
-#RUN touch /usr/local/bin/boot-check.sh
-#
-#RUN echo '#!/bin/bash' > /usr/local/bin/boot-check.sh
-#RUN echo 'sleep 180' >> /usr/local/bin/boot-check.sh
-#RUN echo 'status=$(systemctl is-system-running)' >> /usr/local/bin/boot-check.sh
-#RUN echo 'failed_units=$(systemctl --failed --no-legend | wc -l)' >> /usr/local/bin/boot-check.sh
-#RUN echo 'if [[ "$status" == "running" && "$failed_units" -eq 0 ]]; then' >> /usr/local/bin/boot-check.sh
-#RUN echo '    sudo ostree admin mark-success' >> /usr/local/bin/boot-check.sh
-#RUN echo 'else' >> /usr/local/bin/boot-check.sh
-#RUN echo '    echo "OSTree deployment failed."' >> /usr/local/bin/boot-check.sh
-#RUN echo 'fi' >> /usr/local/bin/boot-check.sh
-#RUN chmod +x /usr/local/bin/boot-check.sh
-
-# Create the systemd service
-#RUN mkdir -p usr/lib/systemd/system
-#RUN touch /usr/lib/systemd/system/boot-check.service
-
-#RUN echo '[Unit]' > /usr/lib/systemd/system/boot-check.service
-#RUN echo 'Description=OSTree 3-Minute Boot Check' >> /usr/lib/systemd/system/boot-check.service
-#RUN echo 'After=graphical.target' >> /usr/lib/systemd/system/boot-check.service
-#RUN echo ""  /usr/lib/systemd/system/boot-check.service
-#RUN echo '[Service]' >> /usr/lib/systemd/system/boot-check.service
-#RUN echo 'Type=simple' >> /usr/lib/systemd/system/boot-check.service
-#RUN echo 'ExecStart=/usr/local/bin/boot-check.sh' >> /usr/lib/systemd/system/boot-check.service
-#RUN echo 'RemainAfterExit=yes' >> /usr/lib/systemd/system/boot-check.service
-#RUN echo ""  /usr/lib/systemd/system/boot-check.service
-#RUN echo '[Install]' >> /usr/lib/systemd/system/boot-check.service
-#RUN echo 'WantedBy=default.target' >> /usr/lib/systemd/system/boot-check.service
 
 # Enable the service
 RUN systemctl enable bazzite-grub-boot-success.timer
@@ -463,7 +433,7 @@ RUN systemctl enable bazzite-grub-boot-success.service
 RUN systemctl enable bazzite-autologin.service
 RUN systemctl enable bazzite-tdpfix.service
 RUN systemctl enable bazzite-flatpak-manager.service
-RUN systemctl enable bazzite-hardware-setup.service
+#RUN systemctl enable bazzite-hardware-setup.service
 
 
 
