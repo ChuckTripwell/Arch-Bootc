@@ -137,17 +137,17 @@ RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
 # Section 3 - Chaotic AUR # We grab some precompiled packages from the Chaotic AUR for things not on Arch repos/better updated~ ovo ####
 ########################################################################################################################################
 
-#RUN pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+RUN pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 
-#RUN pacman-key --init && pacman-key --lsign-key 3056513887B78AEB
+RUN pacman-key --init && pacman-key --lsign-key 3056513887B78AEB
 
-#RUN pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' --noconfirm
+RUN pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' --noconfirm
 
-#RUN pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
+RUN pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
 
-#RUN echo -e '[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist' >> /etc/pacman.conf
+RUN echo -e '[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist' >> /etc/pacman.conf
 
-#RUN pacman -Sy --noconfirm
+RUN pacman -Sy --noconfirm
 
 #RUN pacman -S \
 #      chaotic-aur/niri-git chaotic-aur/input-remapper-git chaotic-aur/vesktop-git chaotic-aur/sc-controller chaotic-aur/flatpak-git \
