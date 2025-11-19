@@ -128,24 +128,6 @@ RUN curl -L \
 # Okular | Kate | Warehouse | Fedora Media Writer | Gear Lever | Haruna | Space Cadet Pinball | Gwenview
 # Audacity | Filelight | Not Tetris 2 | Floorp
 
-########################################################################################################################################
-# Section 2 - Set up bootc dracut | I think it sets up the bootc initial image / Compiles Bootc Package :D #############################
-########################################################################################################################################
-
-# Workaround due to dracut version bump, please remove eventually
-# FIXME: remove
-#RUN printf "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee /etc/dracut.conf.d/fix-bootc.conf
-
-
-COPY --from=builder /home/builder/${AUR_PKG}/* /tmp/
-RUN pacman -Sy --noconfirm && pacman -U --noconfirm /tmp/*.pkg.tar.zst && pacman -Scc --noconfirm
-
-#RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
-#    pacman -S --noconfirm base-devel git rust && \
-#    git clone https://github.com/bootc-dev/bootc.git /tmp/bootc && \
-#    make -C /tmp/bootc bin install-all install-initramfs-dracut && \
-#    sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
-#    dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERSION/initramfs.img"'
 
 ########################################################################################################################################
 # Section 3 - Chaotic AUR # We grab some precompiled packages from the Chaotic AUR for things not on Arch repos/better updated~ ovo ####
@@ -169,6 +151,26 @@ RUN pacman -Sy --noconfirm
 #      --noconfirm
 
 #RUN systemctl enable greetd
+
+########################################################################################################################################
+# Section 2 - Set up bootc dracut | I think it sets up the bootc initial image / Compiles Bootc Package :D #############################
+########################################################################################################################################
+
+# Workaround due to dracut version bump, please remove eventually
+# FIXME: remove
+#RUN printf "systemdsystemconfdir=/etc/systemd/system\nsystemdsystemunitdir=/usr/lib/systemd/system\n" | tee /etc/dracut.conf.d/fix-bootc.conf
+
+
+COPY --from=builder /home/builder/${AUR_PKG}/* /tmp/
+RUN pacman -S --noconfirm rust
+RUN pacman -S --noconfirm && pacman -U --noconfirm /tmp/*.pkg.tar.zst && pacman -Scc --noconfirm
+
+#RUN --mount=type=tmpfs,dst=/tmp --mount=type=tmpfs,dst=/root \
+#    pacman -S --noconfirm base-devel git rust && \
+#    git clone https://github.com/bootc-dev/bootc.git /tmp/bootc && \
+#    make -C /tmp/bootc bin install-all install-initramfs-dracut && \
+#    sh -c 'export KERNEL_VERSION="$(basename "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)")" && \
+#    dracut --force --no-hostonly --reproducible --zstd --verbose --add ostree --kver "$KERNEL_VERSION"  "/usr/lib/modules/$KERNEL_VERSION/initramfs.img"'
 
 ########################################################################################################################################
 # Section 4 Flatpaks preinstalls | We love containers, flatpaks, and protecting installs from breaking! ################################
