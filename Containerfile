@@ -387,7 +387,7 @@ RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
 #
 RUN pacman -S --noconfirm cachyos-handheld linux-cachyos-deckify steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools
 RUN pacman -S --noconfirm plasma-desktop sddm plasma-pa plasma-nm micro fastfetch breeze kate ark scx-scheds scx-manager flatpak dolphin firewalld docker podman distrobox ptyxis waydroid topgrade
-RUN pacman -S --noconfirm docker-compose konsole just
+RUN pacman -S --noconfirm docker-compose konsole just weston
 #_______________________________________________________________________________________________________________________________________
 
 
@@ -435,15 +435,15 @@ RUN systemctl enable /usr/lib/systemd/system/fix-grub-link.service
 # forces sddm to use Wayland.
 #
 #### create file
-RUN mkdir -p /usr/lib/sddm/sddm.conf.d
-RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN mkdir -p /usr/lib/sddm/sddm.conf.d
+#RUN touch /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 #### populate file
-RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-RUN echo "GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
-RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "[General]" > /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "DisplayServer=wayland" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "[Wayland]" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
+#RUN echo "CompositorCommand=kwin_wayland --drm --no-lockscreen --no-global-shortcuts --locale1" >> /usr/lib/sddm/sddm.conf.d/10-wayland.conf
 #_______________________________________________________________________________________________________________________________________
 
 
