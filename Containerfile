@@ -98,7 +98,7 @@ RUN pacman -Rdd --noconfirm vulkan-mesa-device-select || true
 RUN pacman -Rdd --noconfirm lib32-vulkan-mesa-device-select || true
 
 RUN pacman -Sy --noconfirm
-RUN pacman -S --noconfirm mesa-git lib32-mesa-git lib32-vulkan-intel plasma-meta
+#RUN pacman -S --noconfirm mesa-git lib32-mesa-git lib32-vulkan-intel plasma-meta
 RUN pacman -S --noconfirm steam steam-powerbuttond-git steamos-manager jupiter-fan-control steamos-networking-tools
 
 RUN pacman -S --noconfirm cachyos-handheld scx-scheds scx-manager
