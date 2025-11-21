@@ -15,9 +15,22 @@ RUN pacman -S --noconfirm reflector
 # Base packages \ Linux Foundation \ Foss is love, foss is life! We split up packages by category for readability, debug ease, and less dependency trouble
 RUN pacman -S --noconfirm base dracut linux-cachyos linux-firmware ostree systemd btrfs-progs e2fsprogs xfsprogs binutils dosfstools skopeo dbus dbus-glib glib2 shadow
 
-RUN pacman -S --noconfirm plasma-meta
+RUN pacman -S --noconfirm plasma-meta fastfetch micro 
 
 RUN systemctl enable sddm
+
+
+
+
+
+
+###########_____________________________________________________________________________________________________________________________
+# fix user permissions.
+RUN sed -i '/^# %wheel ALL=(ALL:ALL) ALL/s/^# //' /etc/sudoers
+RUN systemctl enable polkit
+#_______________________________________________________________________________________________________________________________________
+
+
 
 
 ########################################################################################################################################
