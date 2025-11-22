@@ -2,7 +2,7 @@ FROM ghcr.io/chucktripwell/core:main
 
 RUN pacman -Sy --noconfirm linux-cachyos plasma-meta
 
-
+RUN systemctl enable sddm
 
 
 
