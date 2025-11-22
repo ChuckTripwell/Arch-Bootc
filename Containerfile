@@ -31,7 +31,7 @@ Target = *\n\
 Description = Cleaning up package cache...\n\
 Depends = coreutils\n\
 When = PostTransaction\n\
-Exec = /usr/bin/rm -rf /var/cache/pacman/pkg" | tee /usr/share/libalpm/hooks/package-cleanup.hook
+Exec = /usr/bin/rm -rf /var/cache/pacman/pkg/*" | tee /usr/share/libalpm/hooks/package-cleanup.hook
 
 # Set up Arch official repos as a backup in case a package isn't in Cachy repos! Fox will plan ahead.
 RUN pacman-key --init 
