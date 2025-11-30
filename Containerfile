@@ -1,27 +1,33 @@
 
-############################################### BUILDER STAGE ##############################################
-FROM cachyos/cachyos-v3:latest AS builder
+############################################### BASE ###############################################
+FROM cachyos/cachyos-v3:latest AS base
 
-# Update and install dependencies
-RUN pacman -Syu --noconfirm && \
-    pacman -S --noconfirm git archiso squashfs-tools xorriso grub rsync
-
-# Clone the deckify branch
-RUN git clone https://github.com/CachyOS/CachyOS-Live-ISO.git /cachyos-iso
-WORKDIR /cachyos-iso
-
-# Build only the airootfs (skip mounting /proc, /dev)
-RUN chmod +x buildiso.sh && \
-    ./buildiso.sh --no-iso --airootfs-only -v
-
-############################################## FINAL IMAGE ##############################################
+############################################### FINAL IMAGE ###############################################
 FROM ghcr.io/chucktripwell/core:main
 
+# Download prebuilt airootfs
+RUN curl -L -o /tmp/airootfs.tar.gz https://github.com/CachyOS/CachyOS-Live-ISO/releases/latest/download/handheld-airootfs.tar.gz && \
+    tar -xzf /tmp/airootfs.tar.gz -C / && \
+    rm /tmp/airootfs.tar.gz
+
+# Install grub and other packages
+RUN pacman -Syu --noconfirm && \
+    pacman -S --noconfirm grub && \
+    pacman -Scc --noconfirm && \
+    rm -rf /var/cache/pacman/pkg/* /tmp/*
+
+# Setup basic directories
+RUN mkdir -p /boot /var /sysroot /usr/lib/ostree
+
+
+############################################## FINAL IMAGE ##############################################
+#FROM ghcr.io/chucktripwell/core:main
+
 # Copy the built airootfs from builder stage
-COPY --from=builder /cachyos-iso/work/handheld/airootfs/ /
+#COPY --from=builder /cachyos-iso/work/handheld/airootfs/ /
 
 # Install grub and other necessary packages
-RUN pacman -Syu --noconfirm && \
+#RUN pacman -Syu --noconfirm && \
     pacman -S --noconfirm grub
 
 # Clean up
