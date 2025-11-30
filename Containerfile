@@ -3,6 +3,7 @@
 ##############################################
 FROM cachyos/cachyos-v3:latest AS builder
 
+
 # Install prerequisites
 RUN pacman -Syu --noconfirm && \
     pacman -S --noconfirm git archiso squashfs-tools xorriso
@@ -13,13 +14,13 @@ RUN git clone --branch cachyos-deckify \
 
 WORKDIR /cachyos-iso
 
-# Build only rootfs, skip ISO
+# Build rootfs only (no unsupported -w option)
 RUN chmod +x buildiso.sh && \
-    ./buildiso.sh -p desktop -v -w --no-iso
+    ./buildiso.sh -p desktop -v
 
 # Copy generated rootfs
 RUN mkdir -p /rootfs && \
-    cp -a out/rootfs/* /rootfs/
+    cp -a work/desktop/airootfs/* /rootfs/
 
 #############################################
 # FINAL IMAGE
