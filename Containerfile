@@ -9,17 +9,21 @@ RUN pacman -Syu --noconfirm && \
     pacman -S --noconfirm git archiso squashfs-tools xorriso
 
 # Clone the deckify branch
-RUN git clone --branch cachyos-deckify \
+RUN git clone \
       https://github.com/CachyOS/CachyOS-Live-ISO.git /cachyos-iso
 
 WORKDIR /cachyos-iso
 
-# Build the default (desktop/KDE) rootfs
-RUN echo "Using default profile" && \
+# Build default profile rootfs dynamically
+RUN pacman -S --noconfirm --needed grub && \
+    echo "Building default profile..." && \
     chmod +x buildiso.sh && \
     ./buildiso.sh -v && \
+    # Detect the built profile dynamically
+    PROFILE_DIR=$(ls -d work/*/airootfs 2>/dev/null | head -n 1) && \
+    echo "Detected profile directory: $PROFILE_DIR" && \
     mkdir -p /rootfs && \
-    cp -a work/desktop/airootfs/* /rootfs/
+    cp -a "$PROFILE_DIR"/* /rootfs/
 
 
 #############################################
