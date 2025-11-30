@@ -14,13 +14,12 @@ RUN git clone --branch cachyos-deckify \
 
 WORKDIR /cachyos-iso
 
-# Build the KDE profile rootfs
-RUN PROFILE=kde && \
-    echo "Using profile: $PROFILE" && \
+# Build the default (desktop/KDE) rootfs
+RUN echo "Using default profile" && \
     chmod +x buildiso.sh && \
-    ./buildiso.sh -p $PROFILE -v && \
+    ./buildiso.sh -v && \
     mkdir -p /rootfs && \
-    cp -a work/$PROFILE/airootfs/* /rootfs/
+    cp -a work/desktop/airootfs/* /rootfs/
 
 
 #############################################
