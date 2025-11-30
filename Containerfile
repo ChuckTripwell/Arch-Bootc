@@ -1,3 +1,4 @@
+
 ############################################### BUILDER STAGE ##############################################
 FROM cachyos/cachyos-v3:latest AS builder
 
@@ -9,15 +10,26 @@ RUN pacman -Syu --noconfirm && \
 RUN git clone https://github.com/CachyOS/CachyOS-Live-ISO.git /cachyos-iso
 WORKDIR /cachyos-iso
 
-# Build default profile rootfs dynamically
+# Build only the airootfs (skip mounting /proc, /dev)
 RUN chmod +x buildiso.sh && \
-    ./buildiso.sh -v
+    ./buildiso.sh --no-iso --airootfs-only -v
 
 ############################################## FINAL IMAGE ##############################################
 FROM ghcr.io/chucktripwell/core:main
 
-# Copy the rootfs from the builder stage dynamically
-COPY --from=builder /cachyos-iso/work/handheld/airootfs/ /   # adjust profile if necessary
+# Copy the built airootfs from builder stage
+COPY --from=builder /cachyos-iso/work/handheld/airootfs/ /
+
+# Install grub and other necessary packages
+RUN pacman -Syu --noconfirm && \
+    pacman -S --noconfirm grub
+
+# Clean up
+RUN pacman -Scc --noconfirm && \
+    rm -rf /var/cache/pacman/pkg/* /tmp/*
+
+
+
 
 
 
