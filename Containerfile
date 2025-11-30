@@ -8,20 +8,15 @@ FROM cachyos/cachyos-v3:latest AS builder
 RUN pacman -Syu --noconfirm && \
     pacman -S --noconfirm git archiso squashfs-tools xorriso
 
-# Clone CachyOS Live ISO (main branch)
-RUN git clone --branch main \
+RUN git clone \
       https://github.com/CachyOS/CachyOS-Live-ISO.git /cachyos-iso
 
 WORKDIR /cachyos-iso
 
-# Use deckify profile and apply fixes
-RUN PROFILE=deckify && \
-    echo "Using profile: $PROFILE" && \
-    chmod +x buildiso.sh && \
-    sed -i 's/^set -e/# set -e/' buildiso.sh && \
-    ./buildiso.sh -p $PROFILE -v && \
+RUN chmod +x buildiso.sh && \
+    ./buildiso.sh -p deckify -v && \
     mkdir -p /rootfs && \
-    cp -a work/$PROFILE/airootfs/* /rootfs/
+    cp -a work/deckify/airootfs/* /rootfs/
 
 
 #############################################
