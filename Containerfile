@@ -1,38 +1,23 @@
+FROM cachyos/cachyos-v3:latest AS builder
 
-############################################### BASE ###############################################
-FROM cachyos/cachyos-v3:latest AS base
+RUN pacman -Sy --noconfirm squashfs-tools bsdtar curl
 
-############################################### FINAL IMAGE ###############################################
+# Download the handheld ISO
+RUN curl -L -o /tmp/cachyos.iso \
+    https://github.com/CachyOS/CachyOS-Live-ISO/releases/latest/download/cachyos-handheld-linux.iso
+
+# Extract airootfs.sfs
+RUN bsdtar -xOf /tmp/cachyos.iso arch/airootfs.sfs > /tmp/airootfs.sfs
+
+# Unsquash the rootfs
+RUN unsquashfs -f -d /rootfs /tmp/airootfs.sfs
+
+
+# ----- Final stage -----
+
 FROM ghcr.io/chucktripwell/core:main
+COPY --from=builder /rootfs/ /
 
-# Download prebuilt airootfs
-RUN curl -L -o /tmp/airootfs.tar.gz https://github.com/CachyOS/CachyOS-Live-ISO/releases/latest/download/handheld-airootfs.tar.gz && \
-    tar -xzf /tmp/airootfs.tar.gz -C / && \
-    rm /tmp/airootfs.tar.gz
-
-# Install grub and other packages
-RUN pacman -Syu --noconfirm && \
-    pacman -S --noconfirm grub && \
-    pacman -Scc --noconfirm && \
-    rm -rf /var/cache/pacman/pkg/* /tmp/*
-
-# Setup basic directories
-RUN mkdir -p /boot /var /sysroot /usr/lib/ostree
-
-
-############################################## FINAL IMAGE ##############################################
-#FROM ghcr.io/chucktripwell/core:main
-
-# Copy the built airootfs from builder stage
-#COPY --from=builder /cachyos-iso/work/handheld/airootfs/ /
-
-# Install grub and other necessary packages
-#RUN pacman -Syu --noconfirm && \
-    pacman -S --noconfirm grub
-
-# Clean up
-RUN pacman -Scc --noconfirm && \
-    rm -rf /var/cache/pacman/pkg/* /tmp/*
 
 
 
