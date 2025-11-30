@@ -1,22 +1,8 @@
-FROM cachyos/cachyos-v3:latest AS builder
-
-RUN pacman -Sy --noconfirm squashfs-tools bsdtar curl
-
-# Download the handheld ISO
-RUN curl -L -o /tmp/cachyos.iso \
-    https://github.com/CachyOS/CachyOS-Live-ISO/releases/latest/download/cachyos-handheld-linux.iso
-
-# Extract airootfs.sfs
-RUN bsdtar -xOf /tmp/cachyos.iso arch/airootfs.sfs > /tmp/airootfs.sfs
-
-# Unsquash the rootfs
-RUN unsquashfs -f -d /rootfs /tmp/airootfs.sfs
-
-
-# ----- Final stage -----
-
 FROM ghcr.io/chucktripwell/core:main
-COPY --from=builder /rootfs/ /
+
+RUN pacman -Sy --noconfirm linux-cachyos plasma-meta fastfetch micro kate dolphin konsole distrobox podman docker docker-compose gamescope
+
+RUN systemctl enable sddm
 
 
 
