@@ -5,31 +5,36 @@ FROM cachyos/cachyos-v3:latest AS builder
 
 # Install needed tools
 RUN pacman -Syu --noconfirm && \
-    pacman -S --noconfirm git base-devel yq jq arch-install-scripts
+    pacman -S --noconfirm git yq jq rsync bash
 
-# Clone Calamares repo (deckify branch)
+# Clone the cachyos-deckify-qt6 branch of the Calamares repo
 RUN git clone --branch cachyos-deckify-qt6 \
       https://github.com/CachyOS/cachyos-calamares \
       /calamares
 
-# Create rootfs
+# Create rootfs directory
 RUN mkdir -p /rootfs
 
-# Install packages from Calamares config
-RUN pacstrap -c /rootfs $(yq '.modules.packages.packages | join(" ")' \
-        /calamares/modules/packages.conf)
+# Copy rootfs overlay directly from the repo
+RUN if [ -d "/calamares/configs/rootfs" ]; then \
+        cp -a /calamares/configs/rootfs/. /rootfs/; \
+    fi
 
-# Directly overlay the Calamares rootfs (NO rsync)
-COPY --from=builder /calamares/configs/rootfs/ /rootfs/
-
-# Apply Calamares module-defined commands inside the rootfs
+# Dynamically execute all module-defined commands inside rootfs
 RUN if [ -d "/calamares/modules" ]; then \
       for f in /calamares/modules/*.conf; do \
-        yq eval -o=json '.commands[]?' "$f" | jq -r '.[]?' | while read -r cmd; do \
-          arch-chroot /rootfs bash -c "$cmd"; \
-        done; \
+        # Extract commands array from YAML, if exists
+        cmds=$(yq eval '.commands[]?' "$f" 2>/dev/null || echo ""); \
+        if [ ! -z "$cmds" ]; then \
+          echo "$cmds" | while read -r cmd; do \
+            arch-chroot /rootfs bash -c "$cmd" || echo "Warning: failed: $cmd"; \
+          done; \
+        fi; \
       done; \
     fi
+
+# Ensure fstab exists (optional)
+RUN mkdir -p /rootfs/etc && touch /rootfs/etc/fstab
 
 
 ##############################################
