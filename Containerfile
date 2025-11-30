@@ -4,7 +4,6 @@
 FROM cachyos/cachyos-v3:latest AS builder
 
 
-# Install prerequisites
 RUN pacman -Syu --noconfirm && \
     pacman -S --noconfirm git archiso squashfs-tools xorriso
 
@@ -14,13 +13,13 @@ RUN git clone --branch cachyos-deckify \
 
 WORKDIR /cachyos-iso
 
-# Build rootfs only (no unsupported -w option)
-RUN chmod +x buildiso.sh && \
-    ./buildiso.sh -p desktop -v
-
-# Copy generated rootfs
-RUN mkdir -p /rootfs && \
-    cp -a work/desktop/airootfs/* /rootfs/
+# Use the Steam Deck profile directly
+RUN PROFILE=deckify && \
+    echo "Using profile: $PROFILE" && \
+    chmod +x buildiso.sh && \
+    ./buildiso.sh -p $PROFILE -v && \
+    mkdir -p /rootfs && \
+    cp -a work/$PROFILE/airootfs/* /rootfs/
 
 #############################################
 # FINAL IMAGE
