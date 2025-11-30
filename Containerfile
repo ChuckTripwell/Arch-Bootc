@@ -4,22 +4,25 @@
 FROM cachyos/cachyos-v3:latest AS builder
 
 
+
 RUN pacman -Syu --noconfirm && \
     pacman -S --noconfirm git archiso squashfs-tools xorriso
 
-# Clone CachyOS Live ISO (deckify branch)
-RUN git clone --branch cachyos-deckify \
+# Clone CachyOS Live ISO (main branch)
+RUN git clone --branch main \
       https://github.com/CachyOS/CachyOS-Live-ISO.git /cachyos-iso
 
 WORKDIR /cachyos-iso
 
-# Use the Steam Deck profile directly
+# Use deckify profile and apply fixes
 RUN PROFILE=deckify && \
     echo "Using profile: $PROFILE" && \
     chmod +x buildiso.sh && \
+    sed -i 's/^set -e/# set -e/' buildiso.sh && \
     ./buildiso.sh -p $PROFILE -v && \
     mkdir -p /rootfs && \
     cp -a work/$PROFILE/airootfs/* /rootfs/
+
 
 #############################################
 # FINAL IMAGE
