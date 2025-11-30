@@ -3,41 +3,25 @@
 ##############################################
 FROM cachyos/cachyos-v3:latest AS builder
 
-# Install needed tools
+# Install prerequisites
 RUN pacman -Syu --noconfirm && \
-    pacman -S --noconfirm git yq jq rsync bash
+    pacman -S --noconfirm git archiso squashfs-tools xorriso
 
-# Clone the cachyos-deckify-qt6 branch of the Calamares repo
-RUN git clone --branch cachyos-deckify-qt6 \
-      https://github.com/CachyOS/cachyos-calamares \
-      /calamares
+# Clone CachyOS Live ISO (deckify branch)
+RUN git clone --branch cachyos-deckify \
+      https://github.com/CachyOS/CachyOS-Live-ISO.git /cachyos-iso
 
-# Create rootfs directory
-RUN mkdir -p /rootfs
+WORKDIR /cachyos-iso
 
-# Copy rootfs overlay directly from the repo
-RUN if [ -d "/calamares/configs/rootfs" ]; then \
-        cp -a /calamares/configs/rootfs/. /rootfs/; \
-    fi
+# Build only rootfs, skip ISO
+RUN chmod +x buildiso.sh && \
+    ./buildiso.sh -p desktop -v -w --no-iso
 
-# Dynamically execute all module-defined commands inside rootfs
-RUN if [ -d "/calamares/modules" ]; then \
-      for f in /calamares/modules/*.conf; do \
-        # Extract commands array from YAML, if exists
-        cmds=$(yq eval '.commands[]?' "$f" 2>/dev/null || echo ""); \
-        if [ ! -z "$cmds" ]; then \
-          echo "$cmds" | while read -r cmd; do \
-            arch-chroot /rootfs bash -c "$cmd" || echo "Warning: failed: $cmd"; \
-          done; \
-        fi; \
-      done; \
-    fi
+# Copy generated rootfs
+RUN mkdir -p /rootfs && \
+    cp -a out/rootfs/* /rootfs/
 
-# Ensure fstab exists (optional)
-RUN mkdir -p /rootfs/etc && touch /rootfs/etc/fstab
-
-
-##############################################
+#############################################
 # FINAL IMAGE
 ##############################################
 FROM ghcr.io/chucktripwell/core:main
