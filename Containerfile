@@ -1,37 +1,24 @@
-##############################################
-# BUILDER STAGE
-##############################################
+############################################### BUILDER STAGE ##############################################
 FROM cachyos/cachyos-v3:latest AS builder
 
-
-
+# Update and install dependencies
 RUN pacman -Syu --noconfirm && \
-    pacman -S --noconfirm git archiso squashfs-tools xorriso
+    pacman -S --noconfirm git archiso squashfs-tools xorriso grub rsync
 
 # Clone the deckify branch
-RUN git clone \
-      https://github.com/CachyOS/CachyOS-Live-ISO.git /cachyos-iso
-
+RUN git clone https://github.com/CachyOS/CachyOS-Live-ISO.git /cachyos-iso
 WORKDIR /cachyos-iso
 
 # Build default profile rootfs dynamically
-RUN pacman -S --noconfirm --needed grub && \
-    echo "Building default profile..." && \
-    chmod +x buildiso.sh && \
-    ./buildiso.sh -v && \
-    # Detect the built profile dynamically
-    PROFILE_DIR=$(ls -d work/*/airootfs 2>/dev/null | head -n 1) && \
-    echo "Detected profile directory: $PROFILE_DIR" && \
-    mkdir -p /rootfs && \
-    cp -a "$PROFILE_DIR"/* /rootfs/
+RUN chmod +x buildiso.sh && \
+    ./buildiso.sh -v
 
-
-#############################################
-# FINAL IMAGE
-##############################################
+############################################## FINAL IMAGE ##############################################
 FROM ghcr.io/chucktripwell/core:main
 
-COPY --from=builder /rootfs/ /
+# Copy the rootfs from the builder stage dynamically
+COPY --from=builder /cachyos-iso/work/handheld/airootfs/ /   # adjust profile if necessary
+
 
 
 # Add 3rd party bootc package repo via Hecknt FIXME Eventually remove this with Arch/Chaotic AUR proper host | https://github.com/hecknt/arch-bootc-pkgs
