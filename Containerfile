@@ -1,6 +1,6 @@
 FROM ghcr.io/chucktripwell/core:main
 
-RUN pacman -Sy --noconfirm linux-cachyos plasma-meta fastfetch micro kate dolphin konsole distrobox podman docker docker-compose
+RUN pacman -Sy --noconfirm linux-cachyos linux-cachyos-zfs plasma-meta fastfetch micro kate dolphin konsole distrobox podman docker docker-compose
 
 RUN pacman -S --noconfirm --needed --nodeps --overwrite="*" $( curl https://raw.githubusercontent.com/CachyOS/CachyOS-Live-ISO/refs/heads/master/archiso/packages_desktop.x86_64 | grep -v firefox  | grep -v linux-cachyos-lts  | grep -v linux-cachyos-lts-zfs ) --ask=4
 
